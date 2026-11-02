@@ -10,7 +10,7 @@ Requires **Python 3** and a modern browser. No package installation or internet 
 ./run.sh
 ```
 
-Open **http://localhost:5175**, then click **PLAY** to enable audio.
+Open **http://localhost:5175**. Music starts automatically when the browser allows it; if autoplay is blocked, click or press a key anywhere on the page to start it.
 
 You can also launch it from any directory using the full path to the script, for example:
 

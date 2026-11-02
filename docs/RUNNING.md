@@ -8,7 +8,7 @@ Open a terminal in the extracted project folder and run:
 ./run.sh
 ```
 
-Open **http://localhost:5175** in your browser. Click **PLAY** for audio; browsers require a user gesture before playing sound. The game and its assets are local and can run offline.
+Open **http://localhost:5175** in your browser. Music starts automatically when the browser allows it; if autoplay is blocked, click or press a key anywhere on the page to start it. The game and its assets are local and can run offline.
 
 The folder still has its original name, `vocaloid-strudel-cookie`. The game's current name is **Sophie Pallas**.
 
@@ -23,7 +23,7 @@ Progress currently lives in the page's memory: refreshing or closing the page st
 - Click Mimi to earn notes and buy synths in the market.
 - Drag a dial upward or downward: eight pixels changes one unit. The value stays put when you release it.
 - Click a dial to add one unit, or focus it and use arrow keys. Home and End select its minimum and maximum.
-- PLAY starts audio; PAUSE silences playback. Your chosen tempo is retained.
+- Music starts automatically and keeps playing while the page is open. Browsers that block autoplay start it after your first click or key press.
 - MUTE silences a synth; ARCHIVE removes it from the active rack. RESTORE brings it back.
 
 ## If the address is busy
