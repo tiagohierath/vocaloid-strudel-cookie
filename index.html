@@ -60,7 +60,7 @@
   <script>
     (()=>{
       const $=selector=>document.querySelector(selector);
-      let credits=5000, clickPower=1, passiveIncome=.1, noteProgress=0, bpm=108, audio=null, clock=null, isPlaying=false, step=0, archived=[],song=null,sequencerSteps=[1,0,1,0,0,1,0,1];
+      let credits=0, clickPower=1, passiveIncome=.1, noteProgress=0, bpm=108, audio=null, clock=null, isPlaying=false, step=0, archived=[],song=null,sequencerSteps=[1,0,1,0,0,1,0,1];
       const drumPattern={kick:[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],snare:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],hat:[0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1]};
       const frequency=midi=>440*Math.pow(2,(midi-69)/12);
       function makeSong(){
@@ -121,14 +121,14 @@
         $('#archive-items').innerHTML=archived.length?archived.map((synth,index)=>`<div class="archived-item"><span>${synth.name}</span><button type="button" class="restore-synth" data-index="${index}">RESTORE</button></div>`).join(''):'<span>Nothing archived.</span>';
         const drumCard=document.querySelector('.synth[data-index="'+synths.findIndex(s=>s.tone==='drum')+'"]');if(drumCard)drumCard.querySelector('.drum-row')?.insertAdjacentHTML('beforebegin','<div class="drum-tools"><button type="button" class="drum-tool" data-drum-action="euclid">EUCLID</button><button type="button" class="drum-tool" data-drum-action="rotate">ROTATE</button><button type="button" class="drum-tool" data-drum-action="clear">CLEAR</button></div>');
         const chordCard=document.querySelector('.synth[data-index="'+synths.findIndex(s=>s.tone==='chord')+'"]');if(chordCard)chordCard.insertAdjacentHTML('beforeend','<div class="drum-tools chord-tools">'+song.degrees.map((degree,index)=>`<button type="button" class="drum-tool chord-step" data-chord-step="${index}">${song.names[index]}</button>`).join('')+'</div>');
-        document.querySelectorAll('.synth').forEach(card=>{const synth=synths[Number(card.dataset.index)];if(!synth)return;synth.patches??=[];card.querySelector('.controls')?.insertAdjacentHTML('afterend','<div class="patchbay"><span class="patch-title">PATCH WIRES · SOURCE → DESTINATION</span><div class="patch-row"><span>SRC</span>'+['LFO','ENV','SEQ'].map(source=>`<button type="button" class="patch-button" title="${source}" aria-label="${source} source" data-patch-source="${source}">${source}</button>`).join('')+'<span>→</span>'+['CUTOFF','PITCH','LEVEL'].map(dest=>`<button type="button" class="patch-button" title="${dest}" aria-label="${dest} destination" data-patch-dest="${dest}">${dest}</button>`).join('')+'</div><div>'+synth.patches.map((patch,index)=>`<button type="button" class="patch-wire" data-patch-remove="${index}" title="remove wire">${patch.source} → ${patch.dest}</button>`).join('')+'</div></div>')});
+        document.querySelectorAll('.synth').forEach(card=>{const synth=synths[Number(card.dataset.index)];if(!synth)return;synth.patches??=[];const destinations=synth.tone==='drum'?['CUTOFF','LEVEL']:['CUTOFF','PITCH','LEVEL'];card.querySelector('.controls')?.insertAdjacentHTML('afterend','<div class="patchbay"><span class="patch-title">PATCH WIRES · SOURCE → DESTINATION</span><div class="patch-row"><span>SRC</span>'+['LFO','ENV','SEQ'].map(source=>`<button type="button" class="patch-button ${patchSource?.synth===synth&&patchSource.source===source?'selected':''}" title="${source}" aria-label="${source} source" data-patch-source="${source}">${source}</button>`).join('')+'<span>→</span>'+destinations.map(dest=>`<button type="button" class="patch-button" title="${dest}" aria-label="${dest} destination" data-patch-dest="${dest}">${dest}</button>`).join('')+'</div><div>'+synth.patches.map((patch,index)=>`<button type="button" class="patch-wire" data-patch-remove="${index}" title="remove wire">${patch.source} → ${patch.dest}</button>`).join('')+'</div></div>')});
         bindDials();updateSound();
       }
       function addOwnedSynth({name,type,cost=0,income=0}){const tone=name.includes('Drum')?'drum':name.includes('Chord')?'chord':name.includes('Star')?'lead':name.includes('Neon')?'pluck':name.includes('Velvet')?'pad':name.includes('Moon')?'glass':name.includes('FM')?'fm':name.includes('Vocal')?'vocal':name.includes('Glitch')?'glitch':name.includes('Organ')?'organ':name.includes('Logic')||name.includes('Sequencer')?'logic':'box',params=Object.fromEntries(['cutoff','resonance','attack','release','gain'].map((key,i)=>[key,instruments[tone]?.defaults[i]??[65,20,0,12,60][i]]));synths.push({name,type,tone,envelope:tone==='lead'||tone==='pad'||tone==='glass'||tone==='vocal'||tone==='logic'||tone==='chord'?'adsr':'pluck',cost,income,owned:true,params});passiveIncome+=income;clickPower+=1;draw()}
       document.addEventListener('click',event=>{const stepButton=event.target.closest('.step');if(stepButton){const index=Number(stepButton.dataset.step);sequencerSteps[index]=sequencerSteps[index]?0:1;document.querySelectorAll(`[data-step="${index}"]`).forEach(button=>{button.classList.toggle('active',!!sequencerSteps[index]);button.setAttribute('aria-pressed',!!sequencerSteps[index])});return}const mute=event.target.closest('.mute-synth');if(mute){const synth=synths[Number(mute.closest('.synth').dataset.index)];synth.muted=!synth.muted;draw();return}const archive=event.target.closest('.archive-synth');if(archive){const index=Number(archive.closest('.synth').dataset.index),synth=synths.splice(index,1)[0];archived.push(synth);passiveIncome-=synth.income;draw();return}const restore=event.target.closest('.restore-synth');if(restore){const synth=archived.splice(Number(restore.dataset.index),1)[0];synths.push(synth);passiveIncome+=synth.income;draw()}});
       document.addEventListener('click',event=>{const chord=event.target.closest('.chord-step');if(chord){const slot=Number(chord.dataset.chordStep),choices=song.degreeChoices[slot];song.degrees[slot]=choices[(choices.indexOf(song.degrees[slot])+1)%choices.length];rebuildChords();draw();return}const tool=event.target.closest('.drum-tool');if(!tool)return;const action=tool.dataset.drumAction;if(action==='clear')Object.keys(drumPattern).forEach(row=>drumPattern[row].fill(0));if(action==='rotate')Object.keys(drumPattern).forEach(row=>drumPattern[row].unshift(drumPattern[row].pop()));if(action==='euclid'){const fills={kick:[4,16],snare:[3,16],hat:[7,16]};Object.entries(fills).forEach(([row,[pulses,length]])=>{drumPattern[row].fill(0);for(let i=0;i<pulses;i++)drumPattern[row][Math.floor(i*length/pulses)]=1})}draw()});
       document.addEventListener('click',event=>{const drumButton=event.target.closest('.drum-step');if(!drumButton)return;const row=drumButton.dataset.drumRow,index=Number(drumButton.dataset.drumStep);drumPattern[row][index]=drumPattern[row][index]?0:1;draw()});
-      document.addEventListener('click',event=>{const removeWire=event.target.closest('[data-patch-remove]');if(removeWire){const card=removeWire.closest('.synth'),synth=synths[Number(card.dataset.index)];synth.patches.splice(Number(removeWire.dataset.patchRemove),1);$('#shop-feedback').textContent='Patch removed.';draw();return}const source=event.target.closest('[data-patch-source]');if(source){patchSource=source.dataset.patchSource;source.closest('.patchbay').querySelectorAll('.patch-button').forEach(button=>button.classList.toggle('selected',button===source));$('#shop-feedback').textContent=`${patchSource} selected — choose a destination jack.`;return}const dest=event.target.closest('[data-patch-dest]');if(dest&&patchSource){const card=dest.closest('.synth'),synth=synths[Number(card.dataset.index)];synth.patches??=[];const wire=`${patchSource} → ${dest.dataset.patchDest}`;if(!synth.patches.some(patch=>patch.source===patchSource&&patch.dest===dest.dataset.patchDest))synth.patches.push({source:patchSource,dest:dest.dataset.patchDest});patchSource=null;$('#shop-feedback').textContent=`Connected ${wire}.`;draw();return}});
+      document.addEventListener('click',event=>{const removeWire=event.target.closest('[data-patch-remove]');if(removeWire){const card=removeWire.closest('.synth'),synth=synths[Number(card.dataset.index)];synth.patches.splice(Number(removeWire.dataset.patchRemove),1);$('#shop-feedback').textContent='Patch removed.';draw();return}const source=event.target.closest('[data-patch-source]');if(source){const synth=synths[Number(source.closest('.synth').dataset.index)];patchSource=patchSource?.synth===synth&&patchSource.source===source.dataset.patchSource?null:{synth,source:source.dataset.patchSource};document.querySelectorAll('[data-patch-source]').forEach(button=>button.classList.toggle('selected',patchSource?.synth===synth&&patchSource.source===button.dataset.patchSource));$('#shop-feedback').textContent=patchSource?`${patchSource.source} selected — choose a destination on this synth.`:'Patch selection cancelled.';return}const dest=event.target.closest('[data-patch-dest]');if(dest&&patchSource){const synth=synths[Number(dest.closest('.synth').dataset.index)];if(patchSource.synth!==synth){$('#shop-feedback').textContent='Choose a destination on the same synth.';return}synth.patches??=[];const wire=`${patchSource.source} → ${dest.dataset.patchDest}`;if(!synth.patches.some(patch=>patch.source===patchSource.source&&patch.dest===dest.dataset.patchDest))synth.patches.push({source:patchSource.source,dest:dest.dataset.patchDest});patchSource=null;$('#shop-feedback').textContent=`Connected ${wire}.`;draw();return}});
       $('#click-target').addEventListener('click',event=>{if(event.target.closest('#click-target')===event.currentTarget){credits+=clickPower;updateEconomy();const avatar=$('#click-target .avatar');avatar.classList.remove('pop');void avatar.offsetWidth;avatar.classList.add('pop')}});
       document.querySelectorAll('.shop-card').forEach(card=>card.querySelector('.buy').addEventListener('click',()=>{
         const cost=Math.ceil(Number(card.dataset.cost)*Math.pow(1.42,Math.max(0,synths.length+archived.length-1)));if(card.dataset.owned==='true'||credits<cost)return;card.dataset.owned='true';credits-=cost;addOwnedSynth({name:card.dataset.name,type:card.dataset.type,cost,income:Number(card.dataset.income)});card.querySelector('.buy').textContent='OWNED ✓';card.querySelector('.buy').disabled=true;card.dataset.owned='true';draw();$('#shop-feedback').textContent=`${card.dataset.name} added to your rack! Your new voice follows the same key and tempo.`;
@@ -153,6 +153,7 @@
         master.connect(limiter).connect(ctx.destination);
         return {ctx,master,voices:new Set()};
       }
+      function levelScale(synth){const patches=synth.patches||[];return (patches.some(patch=>patch.source==='SEQ'&&patch.dest==='LEVEL')?1.25:1)*(patches.some(patch=>patch.source==='ENV'&&patch.dest==='LEVEL')?.45:1)}
       function updateSound(){
         if(!audio)return;
         audio.master.gain.setTargetAtTime(isPlaying&&synths.some(s=>!s.muted&&s.params.gain>0)?.5:0,audio.ctx.currentTime,.02);
@@ -162,7 +163,7 @@
           if(!synths.includes(synth)||synth.muted){voice.stop();continue;}
           voice.filter.frequency.setTargetAtTime(80*Math.pow(150,synth.params.cutoff/100),audio.ctx.currentTime,.02);
           voice.filter.Q.setTargetAtTime(['fm','glass','vocal'].includes(synth.tone)? .7 : .5+synth.params.resonance*.12,audio.ctx.currentTime,.02);
-          voice.level.gain.setTargetAtTime(synth.params.gain/100,audio.ctx.currentTime,.02);
+          voice.level.gain.setTargetAtTime(synth.params.gain/(synth.tone==='drum'?70:100)*levelScale(synth),audio.ctx.currentTime,.02);
         }
       }
       function ensureAudio(){if(!audio)audio=createAudio(new(window.AudioContext||window.webkitAudioContext)());return audio}
@@ -187,14 +188,15 @@
           envelope.gain.linearRampToValueAtTime(.10*sustain*mix*accent,Math.min(hold,time+attack+decay));
           envelope.gain.setValueAtTime(.10*sustain*mix*accent,time+hold);envelope.gain.linearRampToValueAtTime(0,end);
         }
-        level.gain.value=(p.gain/100)*(hasPatch('SEQ','LEVEL')?1.25:1);
+        level.gain.value=(p.gain/100)*levelScale(synth);
+        if(hasPatch('ENV','LEVEL'))level.gain.linearRampToValueAtTime((p.gain/100)*(hasPatch('SEQ','LEVEL')?1.25:1),Math.min(end,time+attack+decay));
         const pan=ctx.createStereoPanner();pan.pan.value=({pluck:-.25,glass:.3,pad:-.15,organ:.15,glitch:.4,fm:-.3})[synth.tone]||0;osc.connect(envelope).connect(filter).connect(level).connect(pan).connect(engine.master);
         const nodes=[osc,envelope,filter,level,pan],sources=[osc];
         const patches=synth.patches||[];
         if(hasPatch('ENV','PITCH')||hasPatch('SEQ','PITCH')){
           osc.detune.setValueAtTime(7,time);osc.detune.linearRampToValueAtTime(0,Math.min(end,time+attack+decay));
         }
-        if(patches.some(patch=>patch.source==='LFO'&&patch.dest==='PITCH')||patches.some(patch=>patch.source==='LFO'&&patch.dest==='CUTOFF')){
+        if(patches.some(patch=>patch.source==='LFO'&&['PITCH','CUTOFF','LEVEL'].includes(patch.dest))){
           const lfo=ctx.createOscillator();lfo.frequency.value=synth.tone==='pad'?.18:.65;
           if(patches.some(patch=>patch.source==='LFO'&&patch.dest==='PITCH')){const depth=ctx.createGain();depth.gain.value=12;lfo.connect(depth).connect(osc.detune);nodes.push(depth)}
           if(patches.some(patch=>patch.source==='LFO'&&patch.dest==='CUTOFF')){const depth=ctx.createGain();depth.gain.value=900;lfo.connect(depth).connect(filter.frequency);nodes.push(depth)}
@@ -217,21 +219,32 @@
         engine.voices.add(voice);osc.onended=voice.stop;
         for(const source of sources){source.start(time);source.stop(end+.01)}
       }
-      function drum(engine,time,kind,accent=1){
-        const {ctx}=engine,gain=ctx.createGain(),filter=ctx.createBiquadFilter();
+      function drum(engine,time,kind,synth,accent=1){
+        const {ctx}=engine,p=synth.params,envelope=ctx.createGain(),filter=ctx.createBiquadFilter(),level=ctx.createGain(),patches=synth.patches||[];
+        const hasPatch=(source,dest)=>patches.some(patch=>patch.source===source&&patch.dest===dest);
         let source;
         if(kind==='kick'){
           source=ctx.createOscillator();source.frequency.setValueAtTime(130,time);source.frequency.exponentialRampToValueAtTime(45,time+.12);
           filter.type='lowpass';filter.frequency.value=1000;
         }else{
-          if(!engine.noise){engine.noise=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*.2),ctx.sampleRate);const data=engine.noise.getChannelData(0);let seed=12345;for(let i=0;i<data.length;i++){seed=(seed*1664525+1013904223)>>>0;data[i]=seed/2147483648-1}}
-          source=ctx.createBufferSource();source.buffer=engine.noise;filter.type=kind==='hat'?'highpass':'bandpass';filter.frequency.value=kind==='hat'?7500:1800;
+          if(!engine.noise){engine.noise=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*2),ctx.sampleRate);const data=engine.noise.getChannelData(0);let seed=12345;for(let i=0;i<data.length;i++){seed=(seed*1664525+1013904223)>>>0;data[i]=seed/2147483648-1}}
+          source=ctx.createBufferSource();source.buffer=engine.noise;source.loop=true;filter.type=kind==='hat'?'highpass':'bandpass';filter.frequency.value=kind==='hat'?7500:1800;
         }
-        const duration=kind==='hat'?.045:.18;
-        gain.gain.setValueAtTime((kind==='kick'?.24:kind==='snare'?.11:.055)*accent,time);gain.gain.exponentialRampToValueAtTime(.0001,time+duration);
-        source.connect(filter).connect(gain).connect(engine.master);source.start(time);source.stop(time+duration+.01);
-        const voice={stop:()=>{try{source.stop()}catch{}source.disconnect();filter.disconnect();gain.disconnect();engine.voices.delete(voice)}};
-        engine.voices.add(voice);source.onended=voice.stop;
+        filter.frequency.value=80*Math.pow(150,p.cutoff/100);
+        filter.Q.value=.5+p.resonance*.12;
+        if(hasPatch('ENV','CUTOFF'))filter.frequency.setValueAtTime(Math.max(90,filter.frequency.value*.22),time);
+        if(hasPatch('SEQ','CUTOFF'))filter.frequency.setValueAtTime(filter.frequency.value+500,time);
+        const attack=.005+p.attack*.008,decay=kind==='kick'?.12:.025,release=.04+p.release*.015,end=time+attack+decay+release;
+        const peak=(kind==='kick'?.24:kind==='snare'?.11:.055)*accent;
+        envelope.gain.setValueAtTime(0,time);envelope.gain.linearRampToValueAtTime(peak,time+attack);envelope.gain.setValueAtTime(peak,time+attack+decay);envelope.gain.exponentialRampToValueAtTime(.0001,end);
+        level.gain.setValueAtTime((p.gain/70)*levelScale(synth),time);
+        if(hasPatch('ENV','LEVEL'))level.gain.linearRampToValueAtTime((p.gain/70)*(hasPatch('SEQ','LEVEL')?1.25:1),Math.min(end,time+attack+decay));
+        source.connect(envelope).connect(filter).connect(level).connect(engine.master);
+        const nodes=[source,envelope,filter,level],sources=[source];
+        if(hasPatch('LFO','CUTOFF')||hasPatch('LFO','LEVEL')){const lfo=ctx.createOscillator();lfo.frequency.value=.65;if(hasPatch('LFO','CUTOFF')){const depth=ctx.createGain();depth.gain.value=900;lfo.connect(depth).connect(filter.frequency);nodes.push(depth)}if(hasPatch('LFO','LEVEL')){const depth=ctx.createGain();depth.gain.value=.035;lfo.connect(depth).connect(level.gain);nodes.push(depth)}lfo.start(time);lfo.stop(end+.01);nodes.push(lfo);sources.push(lfo)}
+        let ended=false;
+        const voice={synth,filter,level,stop:()=>{if(ended)return;ended=true;for(const item of sources){try{item.stop()}catch{}}for(const node of nodes)node.disconnect();engine.voices.delete(voice)}};
+        engine.voices.add(voice);source.onended=voice.stop;source.start(time);source.stop(end+.01);
       }
       function scheduleStep(engine,time,index,rack,composition,tempo,steps,drums=drumPattern){
         const active=rack.filter(s=>!s.muted&&s.params.gain>0);
@@ -258,10 +271,10 @@
           }else if(position%4===2||(bar===3&&position===15))note(chord[motif[Math.floor(position/2)]]*2,beat*.15,.8);
         }
         const drumSynth=rack.find(s=>s.tone==='drum'&&!s.muted&&s.params.gain>0);
-        if(drumSynth&&drums.kick[position])drum(engine,time,'kick',drumSynth.params.gain/70);
-        if(drumSynth&&drums.snare[position])drum(engine,time,'snare',.85*drumSynth.params.gain/70);
-        if(drumSynth&&drums.hat[position])drum(engine,when,'hat',position%4===2?1:.6*drumSynth.params.gain/70);
-        if(bar===3&&phrase%2===1&&position===15)drum(engine,time,'hat',.4);
+        if(drumSynth&&drums.kick[position])drum(engine,time,'kick',drumSynth,1);
+        if(drumSynth&&drums.snare[position])drum(engine,time,'snare',drumSynth,.85);
+        if(drumSynth&&drums.hat[position])drum(engine,when,'hat',drumSynth,position%4===2?1:.6);
+        if(drumSynth&&bar===3&&phrase%2===1&&position===15)drum(engine,time,'hat',drumSynth,.4);
       }
       function showStep(position){
         document.querySelectorAll('.drum-step').forEach(button=>button.classList.toggle('playing',Number(button.dataset.drumStep)===position));

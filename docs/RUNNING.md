@@ -2,10 +2,10 @@
 
 ## Start whenever you want
 
-Run this saved command in a terminal:
+Open a terminal in the extracted project folder and run:
 
 ```sh
-/home/tiago/projects/vocaloid-strudel-cookie/run.sh
+./run.sh
 ```
 
 Open **http://localhost:5175** in your browser. Click **PLAY** for audio; browsers require a user gesture before playing sound. The game and its assets are local and can run offline.
@@ -31,7 +31,7 @@ Progress currently lives in the page's memory: refreshing or closing the page st
 If Sophie Pallas is already running, open **http://localhost:5175**. Otherwise stop the previous server in its terminal, or choose another port:
 
 ```sh
-/home/tiago/projects/vocaloid-strudel-cookie/run.sh --port 5176
+./run.sh --port 5176
 ```
 
 Then open **http://localhost:5176**.
