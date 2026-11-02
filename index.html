@@ -292,10 +292,10 @@
       }
       function startClock(){if(!clock)clock=setInterval(tick,25)}
       async function startMusic(){
-        try{if(audio?.ctx.state==='closed')audio=null;ensureAudio();await audio.ctx.resume();if(audio.ctx.state!=='running')throw new Error('Audio is waiting for a user gesture');if(isPlaying)return;isPlaying=true;updateSound();
+        try{if(audio?.ctx.state==='closed')audio=null;ensureAudio();await audio.ctx.resume();if(audio.ctx.state!=='running')throw new Error('Audio is waiting for a user gesture');if(isPlaying){updateSound();return}isPlaying=true;audio.master.gain.cancelScheduledValues(audio.ctx.currentTime);audio.master.gain.setValueAtTime(.5,audio.ctx.currentTime);updateSound();
           nextStepTime=audio.ctx.currentTime+.03;$('#player-state').dataset.playing='true';tick();startClock();
           document.removeEventListener('pointerdown',startMusic);document.removeEventListener('pointerup',startMusic);document.removeEventListener('touchstart',startMusic);document.removeEventListener('keydown',startMusic);document.removeEventListener('click',startMusic);
-        }catch(error){$('#player-state').dataset.playing='false';$('#player-state').textContent='INTERACT WITH THE PAGE TO START MUSIC';if(error.message!=='Audio is waiting for a user gesture')console.error(error)}
+        }catch(error){$('#player-state').dataset.playing='false';$('#player-state').textContent='TAP OR CLICK ANYWHERE TO START MUSIC';if(error.message!=='Audio is waiting for a user gesture')console.error(error)}
       }
       document.addEventListener('pointerdown',startMusic);
       document.addEventListener('pointerup',startMusic);
