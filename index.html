@@ -91,6 +91,7 @@
         vocal:{hint:'Synthetic choir · vowel moves from oo to ah to ee.',character:'VOWEL',defaults:[85,40,35,60,55]},
         glitch:{hint:'Short digital ticks · attack softens the click; release adds a tail.',defaults:[82,25,0,3,45]},
         organ:{hint:'Held chords · immediate tone, steady body, short release.',defaults:[65,5,0,8,50]},
+        chord:{hint:'Four bar harmony · one button chooses a related chord for each bar.',defaults:[58,8,35,50,55]},
         logic:{hint:'Eight steps trigger notes · attack and release shape each step.',defaults:[68,12,1,18,55]},
         box:{hint:'Simple triangle notes · cutoff darkens the tone.',defaults:[65,10,1,20,55]}
       };
@@ -167,12 +168,17 @@
         filter.type='lowpass';filter.frequency.value=80*Math.pow(150,p.cutoff/100);filter.Q.value=['fm','glass','vocal'].includes(synth.tone)? .7 : .5+p.resonance*.12;
         const attack=.005+p.attack*.008,release=.04+p.release*.015,hold=Math.max(duration,attack),end=time+hold+release;
         const percussive=['bass','pluck','glass','fm','glitch','box'].includes(synth.tone);
+        const decay=percussive?.04+p.resonance*.0015:.12+p.attack*.004;
+        const sustain=percussive?.16+p.gain*.0015:.55+p.gain*.002;
+        filter.frequency.setValueAtTime(Math.max(90,filter.frequency.value*(.55+p.attack*.004)),time);
+        filter.frequency.linearRampToValueAtTime(filter.frequency.value,Math.min(end,time+attack+decay));
         envelope.gain.setValueAtTime(0,time);envelope.gain.linearRampToValueAtTime(.10*mix*accent,time+attack);
         if(percussive){
+          envelope.gain.exponentialRampToValueAtTime(Math.max(.001,.10*sustain*mix*accent),Math.min(end,time+attack+decay));
           envelope.gain.exponentialRampToValueAtTime(.0001,end);
         }else{
-          envelope.gain.linearRampToValueAtTime(.075*mix*accent,time+attack+(hold-attack)*.25);
-          envelope.gain.setValueAtTime(.075*mix*accent,time+hold);envelope.gain.linearRampToValueAtTime(0,end);
+          envelope.gain.linearRampToValueAtTime(.10*sustain*mix*accent,Math.min(hold,time+attack+decay));
+          envelope.gain.setValueAtTime(.10*sustain*mix*accent,time+hold);envelope.gain.linearRampToValueAtTime(0,end);
         }
         level.gain.value=p.gain/100;
         const pan=ctx.createStereoPanner();pan.pan.value=({pluck:-.25,glass:.3,pad:-.15,organ:.15,glitch:.4,fm:-.3})[synth.tone]||0;osc.connect(envelope).connect(filter).connect(level).connect(pan).connect(engine.master);
