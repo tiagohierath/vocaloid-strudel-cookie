@@ -153,10 +153,10 @@
         master.connect(limiter).connect(ctx.destination);
         return {ctx,master,voices:new Set()};
       }
-      function levelScale(synth){const patches=synth.patches||[];return (patches.some(patch=>patch.source==='SEQ'&&patch.dest==='LEVEL')?1.25:1)*(patches.some(patch=>patch.source==='ENV'&&patch.dest==='LEVEL')?.45:1)}
+      function levelScale(synth){const patches=synth.patches||[];return (patches.some(patch=>patch.source==='SEQ'&&patch.dest==='LEVEL')?1.25:1)*(patches.some(patch=>patch.source==='ENV'&&patch.dest==='LEVEL')? .45:1)}
       function updateSound(){
         if(!audio)return;
-        audio.master.gain.setTargetAtTime(isPlaying&&synths.some(s=>!s.muted&&s.params.gain>0)?.5:0,audio.ctx.currentTime,.02);
+        audio.master.gain.setTargetAtTime(isPlaying&&synths.some(s=>!s.muted&&s.params.gain>0)? .5:0,audio.ctx.currentTime,.02);
         for(const voice of audio.voices){
           const synth=voice.synth;
           if(!synth)continue;
@@ -176,9 +176,9 @@
         filter.type='lowpass';filter.frequency.value=80*Math.pow(150,p.cutoff/100);filter.Q.value=['fm','glass','vocal'].includes(synth.tone)? .7 : .5+p.resonance*.12;
         const attack=.005+p.attack*.008,release=.04+p.release*.015,hold=Math.max(duration,attack),end=time+hold+release;
         const percussive=['bass','pluck','glass','fm','glitch','box'].includes(synth.tone);
-        const decay=percussive?.04+p.resonance*.0015:.12+p.attack*.004;
-        const sustain=percussive?.16+p.gain*.0015:.55+p.gain*.002;
-        filter.frequency.setValueAtTime(Math.max(90,filter.frequency.value*(hasPatch('ENV','CUTOFF')?.22:.55)+ (hasPatch('SEQ','CUTOFF')?500:0)),time);
+        const decay=percussive? .04+p.resonance*.0015:.12+p.attack*.004;
+        const sustain=percussive? .16+p.gain*.0015:.55+p.gain*.002;
+        filter.frequency.setValueAtTime(Math.max(90,filter.frequency.value*(hasPatch('ENV','CUTOFF')? .22:.55)+ (hasPatch('SEQ','CUTOFF')?500:0)),time);
         filter.frequency.linearRampToValueAtTime(filter.frequency.value,Math.min(end,time+attack+decay));
         envelope.gain.setValueAtTime(0,time);envelope.gain.linearRampToValueAtTime(.10*mix*accent,time+attack);
         if(percussive){
@@ -197,7 +197,7 @@
           osc.detune.setValueAtTime(7,time);osc.detune.linearRampToValueAtTime(0,Math.min(end,time+attack+decay));
         }
         if(patches.some(patch=>patch.source==='LFO'&&['PITCH','CUTOFF','LEVEL'].includes(patch.dest))){
-          const lfo=ctx.createOscillator();lfo.frequency.value=synth.tone==='pad'?.18:.65;
+          const lfo=ctx.createOscillator();lfo.frequency.value=synth.tone==='pad'? .18:.65;
           if(patches.some(patch=>patch.source==='LFO'&&patch.dest==='PITCH')){const depth=ctx.createGain();depth.gain.value=12;lfo.connect(depth).connect(osc.detune);nodes.push(depth)}
           if(patches.some(patch=>patch.source==='LFO'&&patch.dest==='CUTOFF')){const depth=ctx.createGain();depth.gain.value=900;lfo.connect(depth).connect(filter.frequency);nodes.push(depth)}
           if(patches.some(patch=>patch.source==='LFO'&&patch.dest==='LEVEL')){const depth=ctx.createGain();depth.gain.value=.035;lfo.connect(depth).connect(level.gain);nodes.push(depth)}
