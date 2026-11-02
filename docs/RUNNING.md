@@ -2,10 +2,16 @@
 
 ## Start whenever you want
 
-Open a terminal in the extracted project folder and run:
+On Linux or macOS, open a terminal in the extracted project folder and run:
 
 ```sh
 ./run.sh
+```
+
+On Windows, double-click `run.bat`, or run this from Command Prompt:
+
+```bat
+run.bat
 ```
 
 Open **http://localhost:5175** in your browser. Music starts automatically when the browser allows it; if autoplay is blocked, click or press a key anywhere on the page to start it. The game and its assets are local and can run offline.
@@ -16,7 +22,7 @@ The folder still has its original name, `vocaloid-strudel-cookie`. The game's cu
 
 Keep the terminal running during a session. Press **Ctrl+C** in that terminal to stop the server. To reopen the game, run the same command and open the URL again.
 
-Progress currently lives in the page's memory: refreshing or closing the page starts a new session. Automatic reload after a source edit also resets the session.
+Progress is saved in this browser using local storage: refreshing or closing the page keeps the session. Passive note income is credited for up to eight hours while the page is closed. Automatic reload after a source edit also restores the session. Use **SAVE MIX** to write immediately, or **NEW MIX** to generate a new musical idea while keeping the rack and notes.
 
 ## Controls
 
@@ -34,11 +40,17 @@ If Sophie Pallas is already running, open **http://localhost:5175**. Otherwise s
 ./run.sh --port 5176
 ```
 
+On Windows:
+
+```bat
+run.bat --port 5176
+```
+
 Then open **http://localhost:5176**.
 
 ## Requirements and editing
 
-Only Python 3 and a modern browser are required. If `python3` is missing, install Python 3 through your operating system's package manager.
+Only Python 3 and a modern browser are required. On Windows, install Python 3 from [python.org](https://www.python.org/downloads/windows/) and make sure the `py` launcher is available. On Linux or macOS, install Python 3 through the operating system's package manager if `python3` is missing.
 
 The launcher serves files from the project folder regardless of the terminal's current directory. The server checks for edits to local HTML, JavaScript, and CSS files and automatically reloads connected pages. After switching from the old server, refresh an already open tab once to load this behavior.
 
