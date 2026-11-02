@@ -2,7 +2,13 @@
 
 A local synth clicker game. Click Mimi to earn notes, buy instruments, and shape the music with the rack dials.
 
-## Run the game
+## One-click install
+
+For a friend testing the game on Windows, download the latest **Sophie Pallas setup.exe** from [Releases](https://github.com/tiagohierath/vocaloid-strudel-cookie/releases), double-click it, and leave the default options selected. It installs a private runtime, creates a desktop shortcut, and opens the game immediately. No Python or terminal is needed.
+
+The installed copy checks GitHub for new releases automatically when it opens, so the shortcut stays current.
+
+## Run from the project folder
 
 Requires **Python 3** and a modern browser. No package installation or internet connection is needed. After extracting the release archive, use the launcher for your operating system:
 
@@ -10,7 +16,7 @@ Requires **Python 3** and a modern browser. No package installation or internet 
 ./run.sh
 ```
 
-On Windows, double-click **`run.bat`**, or open Command Prompt in the folder and run:
+On Windows, double-click **`install.bat`** for a one-click local install. It uses Python if already installed, or downloads a private runtime if not. For developer use, double-click **`run.bat`**, or open Command Prompt in the folder and run:
 
 ```bat
 run.bat

@@ -1,0 +1,76 @@
+name: Build Sophie Pallas release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build portable archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p package/docs
+          cp index.html dials.js girl-reference.png serve.py launch.py run.sh run.bat install.py install.bat VERSION README.md package/
+          cp docs/RUNNING.md package/docs/
+          (cd package && zip -qr "../sophie-pallas-${GITHUB_REF_NAME}.zip" .)
+          sha256sum "sophie-pallas-${GITHUB_REF_NAME}.zip" > "sophie-pallas-${GITHUB_REF_NAME}.zip.sha256"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portable-release
+          path: |
+            sophie-pallas-${{ github.ref_name }}.zip
+            sophie-pallas-${{ github.ref_name }}.zip.sha256
+
+  windows-installer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare app and private Python runtime
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force -Path dist/app, dist/runtime | Out-Null
+          $files = @('index.html', 'dials.js', 'girl-reference.png', 'serve.py', 'launch.py', 'run.sh', 'run.bat', 'install.py', 'install.bat', 'VERSION', 'README.md')
+          Copy-Item $files dist/app
+          New-Item -ItemType Directory -Force -Path dist/app/docs | Out-Null
+          Copy-Item docs/RUNNING.md dist/app/docs/RUNNING.md
+          $pythonZip = Join-Path $env:RUNNER_TEMP 'python-embed.zip'
+          Invoke-WebRequest -UseBasicParsing -Uri 'https://www.python.org/ftp/python/3.12.8/python-3.12.8-embed-amd64.zip' -OutFile $pythonZip
+          Expand-Archive -Force -Path $pythonZip -DestinationPath dist/runtime
+      - name: Build setup executable
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' installer.iss
+          $setup = Get-ChildItem dist -Filter '*.exe' | Select-Object -First 1
+          (Get-FileHash $setup.FullName -Algorithm SHA256).Hash.ToLower() + "  " + $setup.Name | Set-Content "$($setup.FullName).sha256"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: |
+            dist/*.exe
+            dist/*.exe.sha256
+
+  publish:
+    needs: [package, windows-installer]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: assets
+          merge-multiple: true
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create "$GITHUB_REF_NAME" assets/* --title "Sophie Pallas $GITHUB_REF_NAME" --generate-notes

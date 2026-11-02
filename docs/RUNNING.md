@@ -1,5 +1,11 @@
 # Running Sophie Pallas
 
+## One-click Windows install
+
+Download the latest setup executable from the [GitHub Releases page](https://github.com/tiagohierath/vocaloid-strudel-cookie/releases), double-click it, and keep the default choices. It installs Sophie Pallas, creates a desktop shortcut, and opens the game. The installed launcher checks for updates automatically.
+
+If you are testing from a source folder instead, double-click `install.bat`. It can download a private Python runtime, so Python does not need to be installed first.
+
 ## Start whenever you want
 
 On Linux or macOS, open a terminal in the extracted project folder and run:
