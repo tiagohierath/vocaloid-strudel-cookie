@@ -123,7 +123,7 @@
         Object.assign(drums.params,{cutoff:randomInt(52,92),resonance:randomInt(8,42),attack:randomInt(0,12),release:randomInt(8,34),gain:randomInt(62,82),pitch:randomInt(46,54),detune:randomInt(45,58),drive:randomInt(8,38),delay:randomInt(2,22),chaos:randomInt(2,18)});
         randomizeVoice(bass);randomizeVoice(drums);
         song.tempo=Math.max(70,Math.min(150,song.tempo+randomInt(-12,12)));song.swing=Math.max(0,Math.min(.2,song.swing+(Math.random()-.5)*.08));
-        song.degrees=song.degrees.map(degree=>Math.random()<.65?(degree+randomChoice([0,1,6]))%7:degree);rebuildChords();
+        song.degrees=song.degrees.map(degree=>Math.random()<.65?(degree+randomChoice([0,1,6]))%7:degree);song.degreeChoices=song.degrees.map(degree=>[degree,(degree+2)%7,(degree+4)%7]);rebuildChords();
         Object.keys(drumPattern).forEach(row=>drumPattern[row].fill(0));
         [0,4,8,12].forEach(stepIndex=>{if(Math.random()>.25)drumPattern.kick[stepIndex]=1});
         if(!drumPattern.kick.some(Boolean))drumPattern.kick[randomInt(0,3)*4]=1;
