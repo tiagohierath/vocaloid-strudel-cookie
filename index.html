@@ -292,12 +292,14 @@
       }
       function startClock(){if(!clock)clock=setInterval(tick,25)}
       async function startMusic(){
-        try{ensureAudio();await audio.ctx.resume();if(audio.ctx.state!=='running')throw new Error('Audio is waiting for a user gesture');if(isPlaying)return;isPlaying=true;updateSound();
+        try{if(audio?.ctx.state==='closed')audio=null;ensureAudio();await audio.ctx.resume();if(audio.ctx.state!=='running')throw new Error('Audio is waiting for a user gesture');if(isPlaying)return;isPlaying=true;updateSound();
           nextStepTime=audio.ctx.currentTime+.03;$('#player-state').dataset.playing='true';tick();startClock();
-          document.removeEventListener('pointerdown',startMusic);document.removeEventListener('keydown',startMusic);document.removeEventListener('click',startMusic);
+          document.removeEventListener('pointerdown',startMusic);document.removeEventListener('pointerup',startMusic);document.removeEventListener('touchstart',startMusic);document.removeEventListener('keydown',startMusic);document.removeEventListener('click',startMusic);
         }catch(error){$('#player-state').dataset.playing='false';$('#player-state').textContent='INTERACT WITH THE PAGE TO START MUSIC';if(error.message!=='Audio is waiting for a user gesture')console.error(error)}
       }
       document.addEventListener('pointerdown',startMusic);
+      document.addEventListener('pointerup',startMusic);
+      document.addEventListener('touchstart',startMusic,{passive:true});
       document.addEventListener('keydown',startMusic);
       document.addEventListener('click',startMusic);
       function writeWav(buffer){const channels=buffer.numberOfChannels,length=buffer.length*channels,bytes=new ArrayBuffer(44+length*2),view=new DataView(bytes);const text=(offset,string)=>{for(let i=0;i<string.length;i++)view.setUint8(offset+i,string.charCodeAt(i))};text(0,'RIFF');view.setUint32(4,36+length*2,true);text(8,'WAVE');text(12,'fmt ');view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,channels,true);view.setUint32(24,buffer.sampleRate,true);view.setUint32(28,buffer.sampleRate*channels*2,true);view.setUint16(32,channels*2,true);view.setUint16(34,16,true);text(36,'data');view.setUint32(40,length*2,true);let pos=44;for(let i=0;i<buffer.length;i++)for(let ch=0;ch<channels;ch++){const sample=Math.max(-1,Math.min(1,buffer.getChannelData(ch)[i]));view.setInt16(pos,sample<0?sample*32768:sample*32767,true);pos+=2}return new Blob([bytes],{type:'audio/wav'})}
