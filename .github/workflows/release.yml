@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check release version
+        shell: bash
+        run: test "$(cat VERSION)" = "${GITHUB_REF_NAME#v}"
       - name: Build portable archive
         shell: bash
         run: |
@@ -33,6 +36,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check release version
+        shell: pwsh
+        run: if ((Get-Content VERSION).Trim() -ne $env:GITHUB_REF_NAME.Substring(1)) { throw 'VERSION does not match tag' }
       - name: Prepare app and private Python runtime
         shell: pwsh
         run: |
