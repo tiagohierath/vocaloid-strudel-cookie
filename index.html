@@ -22,7 +22,7 @@
     body{background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;letter-spacing:.005em}
     header{position:sticky;top:0;z-index:10;background:rgba(247,243,238,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:12px 24px;box-shadow:0 5px 18px rgba(23,21,26,.06)}
     .brand-lockup{display:flex;align-items:baseline;gap:10px}.brand{font-size:15px;letter-spacing:.12em}.brand-sub{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
-    .topmeta{gap:12px}.player{gap:8px}.player-state{min-width:190px;color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase}.credits{display:inline-flex;align-items:center;gap:4px;padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:var(--yellow);font-weight:bold;white-space:nowrap}
+    .topmeta{gap:12px}.player{gap:8px}.player-state{min-width:190px;color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase}.audio-toggle{background:var(--pink);font-size:11px;font-weight:bold;letter-spacing:.04em}.audio-toggle[aria-pressed="true"]{background:var(--green)}.credits{display:inline-flex;align-items:center;gap:4px;padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:var(--yellow);font-weight:bold;white-space:nowrap}
     .mix-actions{display:flex;gap:6px}.mix-actions button{font-size:11px;padding:7px 10px}
     button{border-radius:999px;transition:transform .16s ease,background .16s ease,box-shadow .16s ease}button:hover{background:#fff;transform:translateY(-1px);box-shadow:0 3px 0 var(--ink)}button:active{transform:translateY(1px);box-shadow:none}button:focus-visible{outline:3px solid #ed709d;outline-offset:2px}
     #render-wav{background:var(--ink);color:#fff;border-color:var(--ink)}#render-wav:hover{background:#3e3442}.mix-actions #save-game{background:var(--green)}.mix-actions #new-mix{background:var(--blue)}
@@ -41,7 +41,7 @@
   <header>
     <div class="brand-lockup"><div class="brand">♪ SOPHIE PALLAS</div><span class="brand-sub">tiny music machine</span></div>
     <div class="topmeta">
-      <div class="player"><button id="render-wav" type="button">↓ BOUNCE LOOP · 3:00 WAV</button><span id="player-state" class="player-state">STARTING MUSIC…</span></div>
+      <div class="player"><button id="audio-toggle" class="audio-toggle" type="button" aria-pressed="false">▶ START SOUND</button><button id="render-wav" type="button">↓ BOUNCE LOOP · 3:00 WAV</button><span id="player-state" class="player-state">STARTING MUSIC…</span></div>
       <div class="mix-actions"><button id="save-game" type="button">SAVE MIX</button><button id="new-mix" type="button">↻ NEW MIX</button></div>
       <span class="credits">♪ NOTES: <span id="credits">0</span></span>
     </div>
@@ -382,17 +382,21 @@
         }
       }
       function startClock(){if(!clock)clock=setInterval(tick,25)}
+      function updateAudioToggle(){const button=$('#audio-toggle');button.textContent=isPlaying?'Ⅱ PAUSE SOUND':'▶ START SOUND';button.setAttribute('aria-pressed',String(isPlaying))}
+      function stopMusic(){isPlaying=false;stopVoices();if(audio){audio.master.gain.cancelScheduledValues(audio.ctx.currentTime);audio.master.gain.setTargetAtTime(0,audio.ctx.currentTime,.02)}$('#player-state').dataset.playing='false';$('#player-state').textContent='MUSIC PAUSED — PRESS START SOUND';updateAudioToggle()}
       async function startMusic(){
         try{if(audio?.ctx.state==='closed')audio=null;ensureAudio();await audio.ctx.resume();if(audio.ctx.state!=='running')throw new Error('Audio is waiting for a user gesture');if(isPlaying){updateSound();return}isPlaying=true;audio.master.gain.cancelScheduledValues(audio.ctx.currentTime);audio.master.gain.setValueAtTime(.5,audio.ctx.currentTime);updateSound();
-          nextStepTime=audio.ctx.currentTime+.03;$('#player-state').dataset.playing='true';tick();startClock();
-          document.removeEventListener('pointerdown',startMusic);document.removeEventListener('pointerup',startMusic);document.removeEventListener('touchstart',startMusic);document.removeEventListener('keydown',startMusic);document.removeEventListener('click',startMusic);
-        }catch(error){$('#player-state').dataset.playing='false';$('#player-state').textContent='TAP OR CLICK ANYWHERE TO START MUSIC';if(error.message!=='Audio is waiting for a user gesture')console.error(error)}
+          nextStepTime=audio.ctx.currentTime+.03;$('#player-state').dataset.playing='true';$('#player-state').textContent='MUSIC PLAYING';updateAudioToggle();tick();startClock();
+          document.removeEventListener('pointerdown',startFromInteraction);document.removeEventListener('pointerup',startFromInteraction);document.removeEventListener('touchstart',startFromInteraction);document.removeEventListener('keydown',startFromInteraction);document.removeEventListener('click',startFromInteraction);
+        }catch(error){$('#player-state').dataset.playing='false';$('#player-state').textContent='PRESS START SOUND TO ENABLE AUDIO';updateAudioToggle();if(error.message!=='Audio is waiting for a user gesture')console.error(error)}
       }
-      document.addEventListener('pointerdown',startMusic);
-      document.addEventListener('pointerup',startMusic);
-      document.addEventListener('touchstart',startMusic,{passive:true});
-      document.addEventListener('keydown',startMusic);
-      document.addEventListener('click',startMusic);
+      function startFromInteraction(event){if(event.target.closest('#audio-toggle'))return;startMusic()}
+      $('#audio-toggle').addEventListener('click',event=>{event.stopPropagation();if(isPlaying)stopMusic();else startMusic()});
+      document.addEventListener('pointerdown',startFromInteraction);
+      document.addEventListener('pointerup',startFromInteraction);
+      document.addEventListener('touchstart',startFromInteraction,{passive:true});
+      document.addEventListener('keydown',startFromInteraction);
+      document.addEventListener('click',startFromInteraction);
       function writeWav(buffer){const channels=buffer.numberOfChannels,length=buffer.length*channels,bytes=new ArrayBuffer(44+length*2),view=new DataView(bytes);const text=(offset,string)=>{for(let i=0;i<string.length;i++)view.setUint8(offset+i,string.charCodeAt(i))};text(0,'RIFF');view.setUint32(4,36+length*2,true);text(8,'WAVE');text(12,'fmt ');view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,channels,true);view.setUint32(24,buffer.sampleRate,true);view.setUint32(28,buffer.sampleRate*channels*2,true);view.setUint16(32,channels*2,true);view.setUint16(34,16,true);text(36,'data');view.setUint32(40,length*2,true);let pos=44;for(let i=0;i<buffer.length;i++)for(let ch=0;ch<channels;ch++){const sample=Math.max(-1,Math.min(1,buffer.getChannelData(ch)[i]));view.setInt16(pos,sample<0?sample*32768:sample*32767,true);pos+=2}return new Blob([bytes],{type:'audio/wav'})}
       $('#render-wav').addEventListener('click',async()=>{
         const button=$('#render-wav');button.disabled=true;button.textContent='BOUNCING…';
@@ -415,7 +419,7 @@
         $('#loop-style').textContent=`${song.style} · ${song.key}`;
         $('#song-key').textContent=song.key;$('#song-chords').textContent=song.names.join(' · ');
       }
-      song=makeSong();randomizeNewSession();const restored=loadGame();setBpm(bpm);updateSessionLabels();$('#player-state').textContent='STARTING MUSIC…';
+      song=makeSong();randomizeNewSession();const restored=loadGame();setBpm(bpm);updateSessionLabels();$('#player-state').textContent='PRESS START SOUND TO ENABLE AUDIO';updateAudioToggle();
       draw();hydrated=true;saveGame(true);
       if(restored){$('#shop-feedback').textContent=offlineEarned?`Welcome back — ${offlineEarned} notes earned while you were away.`:'Welcome back — your mix is loaded.'}else $('#shop-feedback').textContent='Click Mimi to earn your first notes.';
       window.__mimiGameReady=true;startMusic();
