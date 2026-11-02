@@ -55,7 +55,8 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' installer.iss
+          $version = (Get-Content VERSION).Trim()
+          & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' "/DAppVersion=$version" installer.iss
           $setup = Get-ChildItem dist -Filter '*.exe' | Select-Object -First 1
           (Get-FileHash $setup.FullName -Algorithm SHA256).Hash.ToLower() + "  " + $setup.Name | Set-Content "$($setup.FullName).sha256"
       - uses: actions/upload-artifact@v4

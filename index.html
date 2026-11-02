@@ -35,34 +35,40 @@
     @media(max-width:1100px){main{grid-template-columns:minmax(260px,.9fr) minmax(340px,1.1fr)}.shop{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.shop>.eyebrow,.shop>.title,.shop>.balance,.shop>#shop-feedback{grid-column:1/-1}.shop-card{margin:0}.balance{top:82px}}
     @media(max-width:720px){header{position:static;padding:14px 16px}.brand-lockup{width:100%;justify-content:space-between}.brand-sub{font-size:9px}.topmeta{width:100%;align-items:stretch}.player{width:100%;flex-wrap:wrap}.player-state{order:3;width:100%;min-width:0}.mix-actions{margin-left:auto}#render-wav{flex:1}.credits{justify-content:center}main{display:block;min-height:0}.col{border-right:0;border-bottom:1px solid var(--line);padding:24px 16px}.avatar-wrap{height:min(68vh,500px);min-height:350px}.shop{display:block}.shop-card{margin:12px 0}.balance{position:static}.controls{gap:9px}.patchbay .patch-row{gap:5px}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+    /* Quiet mode: controls stay, decoration stays out of the way. */
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    button:hover,button:active,.avatar-wrap:hover,.synth:hover,.shop-card:hover{transform:none!important;box-shadow:none!important}
+    .brand-sub,.eyebrow,.live-badge,.status,.session-summary,.shop-desc,.synth-type,.synth-flow,.feedback{display:none!important}
+    .power,.archive-list:empty{display:none!important}
+    .avatar.pop{animation:none!important}
+    .buy{font-size:0}.buy:after{content:'BUY';font-size:12px}
 </style>
 </head>
 <body>
   <header>
-    <div class="brand-lockup"><div class="brand">♪ SOPHIE PALLAS</div><span class="brand-sub">tiny music machine</span></div>
+    <div class="brand-lockup"><div class="brand">♪ SOPHIE PALLAS</div></div>
     <div class="topmeta">
-      <div class="player"><button id="audio-toggle" class="audio-toggle" type="button" aria-pressed="false">▶ START SOUND</button><button id="render-wav" type="button">↓ BOUNCE LOOP · 3:00 WAV</button><span id="player-state" class="player-state">STARTING MUSIC…</span></div>
-      <div class="mix-actions"><button id="save-game" type="button">SAVE MIX</button><button id="new-mix" type="button">↻ NEW MIX</button></div>
+      <div class="player"><button id="audio-toggle" class="audio-toggle" type="button" aria-pressed="false">▶ SOUND</button><button id="render-wav" type="button">↓ WAV</button><span id="player-state" class="player-state">READY</span></div>
+      <div class="mix-actions"><button id="save-game" type="button">SAVE</button><button id="new-mix" type="button">NEW</button></div>
       <span class="credits">♪ NOTES: <span id="credits">0</span></span>
     </div>
   </header>
   <main>
     <section class="col girl-col">
-      <div class="girl-head"><div><div class="eyebrow">01 / PLAYGROUND</div><h1 class="hero-title">MAKE A<br>LOOP</h1></div><span class="live-badge">LIVE</span></div>
+      <div class="girl-head"><div><h1 class="hero-title">MIMI</h1></div></div>
       <div class="avatar-wrap" id="click-target" title="Click Mimi to earn notes"><img class="avatar" src="girl-reference.png" alt="Mimi, the floating synth girl"></div>
-      <div class="click-hint">CLICK MIMI TO EARN NOTES</div><div class="status">Earn notes. Build your rack. Shape the loop.</div>
-      <div class="session-summary"><span>NOW PLAYING</span><strong id="loop-style">Preparing a new loop…</strong><small>Progress is saved in this browser.</small></div>
-      <div class="tagrow"><div class="tag">+<span id="click-power">1</span> / CLICK</div><div class="tag">KEY: <span id="song-key">C</span></div><div class="tag">CHORDS: <span id="song-chords">I V vi IV</span></div></div>
-      <div class="bpm-control"><div class="dial" id="bpm-dial" role="slider" aria-orientation="vertical" tabindex="0" aria-label="Tempo" aria-valuemin="20" aria-valuemax="180" aria-valuenow="108"></div><strong>BPM <span id="bpm-value">108</span></strong><small>DRAG OR CLICK</small></div>
+      <div class="click-hint">CLICK</div>
+      <div class="tagrow"><div class="tag">+<span id="click-power">1</span></div><div class="tag"><span id="song-key">C</span></div><div class="tag"><span id="song-chords">I V vi IV</span></div></div>
+      <div class="bpm-control"><div class="dial" id="bpm-dial" role="slider" aria-orientation="vertical" tabindex="0" aria-label="Tempo" aria-valuemin="20" aria-valuemax="180" aria-valuenow="108"></div><strong><span id="bpm-value">108</span> BPM</strong></div>
     </section>
     <section class="col rack">
-      <div class="rack-head"><div><div class="eyebrow">02 / LIVE RACK</div><h2 class="title">SYNTHS</h2></div><div id="owned-count">1 synth</div></div>
+      <div class="rack-head"><div><h2 class="title">SYNTHS</h2></div><div id="owned-count">1</div></div>
       <div id="rack-items"><article class="synth tone-bass" data-index="0"><div class="synth-top"><div><div class="synth-name">Cookie Bass</div><div class="synth-type">ACID BASS / STARTER</div></div><div class="power">•ᴗ•</div></div><div class="controls"><div class="knob"><div class="dial synth-dial" data-param="cutoff" tabindex="0"></div>CUTOFF</div><div class="knob"><div class="dial synth-dial" data-param="delay" tabindex="0"></div>DRIVE</div><div class="knob"><div class="dial synth-dial" data-param="reverb" tabindex="0"></div>SUB</div><div class="knob"><div class="dial synth-dial" data-param="gain" tabindex="0"></div>GAIN</div></div><div><button type="button" class="mute-synth">MUTE</button> <button type="button" class="archive-synth">ARCHIVE</button></div></article></div>
       <div id="archive-items" class="archive-list"></div>
     </section>
     <section class="col shop">
-      <div class="eyebrow">03 / THE MARKET</div><h2 class="title">BUY SYNTHS</h2>
-      <div class="balance"><span>YOUR BALANCE</span><strong>♪ <span id="balance">0</span> NOTES</strong></div>
+      <h2 class="title">SHOP</h2>
+      <div class="balance"><span>NOTES</span><strong>♪ <span id="balance">0</span></strong></div>
       <div class="shop-card" data-name="Star Sprinkle" data-cost="30" data-income="1" data-type="SWEET LEAD / +1 NOTE PER SECOND"><div class="card-line"><span>Star Sprinkle</span><span>✦ 30</span></div><div class="shop-desc">A bright little lead for the melody.</div><button class="buy" type="button">BUY SYNTH</button></div>
       <div class="shop-card" data-name="Neon Wafer" data-cost="75" data-income="3" data-type="CRISP PLUCK / +3 NOTES PER SECOND"><div class="card-line"><span>Neon Wafer</span><span>✦ 75</span></div><div class="shop-desc">Crisp digital plucks with a little crackle.</div><button class="buy" type="button">BUY SYNTH</button></div>
       <div class="shop-card" data-name="Velvet Crumb" data-cost="150" data-income="7" data-type="SOFT PAD / +7 NOTES PER SECOND"><div class="card-line"><span>Velvet Crumb</span><span>✦ 150</span></div><div class="shop-desc">Soft and wide, for the space between words.</div><button class="buy" type="button">BUY SYNTH</button></div>
@@ -195,14 +201,14 @@
       function updateEconomy(){
         credits=finite(credits);passiveIncome=Math.max(0,finite(passiveIncome));
         $('#credits').textContent=Math.floor(credits);$('#balance').textContent=Math.floor(credits);$('#click-power').textContent=Math.floor(clickPower);
-        document.querySelectorAll('.buy').forEach(button=>{const card=button.closest('.shop-card'),baseCost=Number(card.dataset.cost),cost=Math.ceil(ECONOMY_MULTIPLIER*baseCost*Math.pow(1.42,Math.max(0,synths.length+archived.length-1)));const owned=card.dataset.owned==='true';const locked=!owned&&credits<cost;button.disabled=owned||locked;card.classList.toggle('locked',locked);card.querySelector('.card-line span:last-child').textContent=`♪ ${cost} NOTES`;button.textContent=owned?'OWNED ✓':locked?`NEED ${Math.ceil(cost-credits)} MORE NOTES`:'BUY SYNTH'});
+        document.querySelectorAll('.buy').forEach(button=>{const card=button.closest('.shop-card'),baseCost=Number(card.dataset.cost),cost=Math.ceil(ECONOMY_MULTIPLIER*baseCost*Math.pow(1.42,Math.max(0,synths.length+archived.length-1)));const owned=card.dataset.owned==='true';const locked=!owned&&credits<cost;button.disabled=owned||locked;card.classList.toggle('locked',locked);card.querySelector('.card-line span:last-child').textContent=`♪ ${cost}`;button.textContent=owned?'OWNED ✓':locked?`NEED ${Math.ceil(cost-credits)}`:'BUY'});
         saveGame();
       }
       function draw(){
         updateEconomy();
-        $('#owned-count').textContent=`${synths.length} synth${synths.length===1?'':'s'}`;
+        $('#owned-count').textContent=synths.length;
         $('#rack-items').innerHTML=synths.map((synth,index)=>{const maxControls=10;const grid=synth.tone==='logic'?'<div class="synth-type">MELODY STEPS · 8 NOTES</div><div class="step-grid">'+sequencerSteps.map((active,stepIndex)=>`<button type="button" class="step ${active?'active':''}" data-step="${stepIndex}" aria-pressed="${!!active}">${stepIndex+1}</button>`).join('')+'</div>':synth.tone==='drum'?'<div class="synth-type">DRUM LOOP · 16 STEPS</div>'+Object.entries(drumPattern).map(([row,pattern])=>`<div class="drum-row"><span>${row.toUpperCase()}</span>${pattern.map((active,stepIndex)=>`<button type="button" class="drum-step ${active?'active':''}" data-drum-row="${row}" data-drum-step="${stepIndex}" aria-label="${row} step ${stepIndex+1}" aria-pressed="${!!active}">${stepIndex%4===0?stepIndex/4+1:'·'}</button>`).join('')}</div>`).join(''):'';const flow=synth.tone==='bass'?'<div class="synth-flow">OSCILLATOR → MIXER → FILTER → VCA</div>':'';return `<article class="synth tone-${synth.tone||'box'} ${synth.muted?'is-muted':''}" data-index="${index}"><div class="synth-top"><div><div class="synth-name">${synth.name}</div><div class="synth-type">${synth.type}</div><div class="synth-type">${instruments[synth.tone]?.hint||'A small drum voice with its own loop.'}</div>${flow}</div><div class="power" aria-label="${synth.muted?'Muted':'Powered on'}"></div></div><div class="controls">${Object.entries(synth.params).slice(0,maxControls).map(([param,value])=>`<label class="knob"><div class="dial synth-dial" role="slider" aria-orientation="vertical" tabindex="0" aria-label="${controlLabel(synth,param)}" aria-valuetext="${formatParam(param,value)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${value}" data-param="${param}" style="--angle:${-135+value*2.7}deg"></div>${controlLabel(synth,param)}<br><span>${formatParam(param,value)}</span></label>`).join('')}</div>${grid}<div><button type="button" class="mute-synth">${synth.muted?'UNMUTE':'MUTE'}</button> <button type="button" class="archive-synth">ARCHIVE</button></div></article>`}).join('');
-        $('#archive-items').innerHTML=archived.length?archived.map((synth,index)=>`<div class="archived-item"><span>${synth.name}</span><button type="button" class="restore-synth" data-index="${index}">RESTORE</button></div>`).join(''):'<span>Nothing archived.</span>';
+        $('#archive-items').innerHTML=archived.length?archived.map((synth,index)=>`<div class="archived-item"><span>${synth.name}</span><button type="button" class="restore-synth" data-index="${index}">RESTORE</button></div>`).join(''):'';
         const drumCard=document.querySelector('.synth[data-index="'+synths.findIndex(s=>s.tone==='drum')+'"]');if(drumCard)drumCard.querySelector('.drum-row')?.insertAdjacentHTML('beforebegin',`<div class="drum-tools"><button type="button" class="drum-tool toggle-drums" data-drum-action="toggle">DRUMS ${synths.find(s=>s.tone==='drum')?.muted?'OFF':'ON'}</button><button type="button" class="drum-tool" data-drum-action="euclid">EUCLID</button><button type="button" class="drum-tool" data-drum-action="rotate">ROTATE</button><button type="button" class="drum-tool" data-drum-action="clear">CLEAR</button></div>`);
         const chordCard=document.querySelector('.synth[data-index="'+synths.findIndex(s=>s.tone==='chord')+'"]');if(chordCard)chordCard.insertAdjacentHTML('beforeend','<div class="drum-tools chord-tools">'+song.degrees.map((degree,index)=>`<button type="button" class="drum-tool chord-step" data-chord-step="${index}">${song.names[index]}</button>`).join('')+'</div>');
         document.querySelectorAll('.synth').forEach(card=>{const synth=synths[Number(card.dataset.index)];if(!synth)return;synth.patches??=[];const destinations=synth.tone==='drum'?['CUTOFF','LEVEL']:['CUTOFF','PITCH','LEVEL'];const sources=['LFO','ENV','SEQ'].map(source=>`<button type="button" class="patch-button ${patchSource?.synth===synth&&patchSource.source===source?'selected':''}" title="${source} source" aria-label="${source} source" data-patch-source="${source}">${source}</button>`).join('');const targets=destinations.map(dest=>`<button type="button" class="patch-button" title="${dest} target" aria-label="${dest} target" data-patch-dest="${dest}">${dest}</button>`).join('');const wires=synth.patches.map((patch,index)=>`<button type="button" class="patch-wire" data-patch-remove="${index}" title="click to remove ${patch.source} to ${patch.dest}">${patch.source} → ${patch.dest}</button>`).join('');card.querySelector('.controls')?.insertAdjacentHTML('afterend',`<div class="patchbay"><span class="patch-title">MODULATION WIRES</span><div class="patch-row"><span>SOURCE</span>${sources}<span>→ TARGET</span>${targets}</div><div>${synth.patches.length?'CONNECTED: ':''}${wires}</div></div>`) });
@@ -213,7 +219,7 @@
       document.addEventListener('click',event=>{const chord=event.target.closest('.chord-step');if(chord){const slot=Number(chord.dataset.chordStep),choices=song.degreeChoices[slot];song.degrees[slot]=choices[(choices.indexOf(song.degrees[slot])+1)%choices.length];rebuildChords();draw();return}const tool=event.target.closest('.drum-tool');if(!tool)return;const action=tool.dataset.drumAction;if(action==='toggle'){const drumSynth=synths.find(s=>s.tone==='drum');if(drumSynth)drumSynth.muted=!drumSynth.muted;draw();return}if(action==='clear')Object.keys(drumPattern).forEach(row=>drumPattern[row].fill(0));if(action==='rotate')Object.keys(drumPattern).forEach(row=>drumPattern[row].unshift(drumPattern[row].pop()));if(action==='euclid'){const fills={kick:[4,16],snare:[3,16],hat:[7,16]};Object.entries(fills).forEach(([row,[pulses,length]])=>{drumPattern[row].fill(0);for(let i=0;i<pulses;i++)drumPattern[row][Math.floor(i*length/pulses)]=1})}draw()});
       document.addEventListener('click',event=>{const drumButton=event.target.closest('.drum-step');if(!drumButton)return;const row=drumButton.dataset.drumRow,index=Number(drumButton.dataset.drumStep);drumPattern[row][index]=drumPattern[row][index]?0:1;draw()});
       document.addEventListener('click',event=>{const removeWire=event.target.closest('[data-patch-remove]');if(removeWire){const card=removeWire.closest('.synth'),synth=synths[Number(card.dataset.index)];synth.patches.splice(Number(removeWire.dataset.patchRemove),1);$('#shop-feedback').textContent='Wire removed.';draw();return}const source=event.target.closest('[data-patch-source]');if(source){const synth=synths[Number(source.closest('.synth').dataset.index)];patchSource=patchSource?.synth===synth&&patchSource.source===source.dataset.patchSource?null:{synth,source:source.dataset.patchSource};document.querySelectorAll('[data-patch-source]').forEach(button=>button.classList.toggle('selected',patchSource?.synth===synth&&patchSource.source===button.dataset.patchSource));$('#shop-feedback').textContent=patchSource?`${patchSource.source} selected — now choose a TARGET.`:'Wire selection cancelled.';saveGame();return}const dest=event.target.closest('[data-patch-dest]');if(dest&&!patchSource){$('#shop-feedback').textContent='Choose a SOURCE first (LFO, ENV, or SEQ).';return}if(dest&&patchSource){const synth=synths[Number(dest.closest('.synth').dataset.index)];if(patchSource.synth!==synth){$('#shop-feedback').textContent='Choose a target on the same synth card.';return}synth.patches??=[];const wire=`${patchSource.source} → ${dest.dataset.patchDest}`;if(!synth.patches.some(patch=>patch.source===patchSource.source&&patch.dest===dest.dataset.patchDest))synth.patches.push({source:patchSource.source,dest:dest.dataset.patchDest});patchSource=null;$('#shop-feedback').textContent=`Connected ${wire}.`;draw();return}});
-      $('#click-target').addEventListener('click',event=>{if(event.target.closest('#click-target')===event.currentTarget){credits+=clickPower;updateEconomy();const avatar=$('#click-target .avatar');avatar.classList.remove('pop');void avatar.offsetWidth;avatar.classList.add('pop')}});
+      $('#click-target').addEventListener('click',event=>{if(event.target.closest('#click-target')===event.currentTarget){credits+=clickPower;updateEconomy()}});
       document.querySelectorAll('.shop-card').forEach(card=>card.querySelector('.buy').addEventListener('click',()=>{
         const cost=Math.ceil(ECONOMY_MULTIPLIER*Number(card.dataset.cost)*Math.pow(1.42,Math.max(0,synths.length+archived.length-1)));if(card.dataset.owned==='true'||credits<cost)return;card.dataset.owned='true';credits-=cost;addOwnedSynth({name:card.dataset.name,type:card.dataset.type,cost,income:Number(card.dataset.income)});card.querySelector('.buy').textContent='OWNED ✓';card.querySelector('.buy').disabled=true;card.dataset.owned='true';draw();$('#shop-feedback').textContent=`${card.dataset.name} added to your rack! Your new voice follows the same key and tempo.`;
       }));
@@ -377,18 +383,18 @@
         if(nextStepTime<audio.ctx.currentTime-.1)nextStepTime=audio.ctx.currentTime+.02;
         while(nextStepTime<audio.ctx.currentTime+.1){
           scheduleStep(audio,nextStepTime,step,synths,song,bpm,sequencerSteps,drumPattern);
-          const current=step;setTimeout(()=>{if(isPlaying){showStep(current%16);$('#player-state').textContent=`4/4 · BAR ${Math.floor(current/16)%4+1}/4 · ${song.names[Math.floor(current/16)%4]}`}},Math.max(0,(nextStepTime-audio.ctx.currentTime)*1000));
+          const current=step;setTimeout(()=>{if(isPlaying)showStep(current%16)},Math.max(0,(nextStepTime-audio.ctx.currentTime)*1000));
           step++;nextStepTime+=60/bpm/4;
         }
       }
       function startClock(){if(!clock)clock=setInterval(tick,25)}
-      function updateAudioToggle(){const button=$('#audio-toggle');button.textContent=isPlaying?'Ⅱ PAUSE SOUND':'▶ START SOUND';button.setAttribute('aria-pressed',String(isPlaying))}
-      function stopMusic(){isPlaying=false;stopVoices();if(audio){audio.master.gain.cancelScheduledValues(audio.ctx.currentTime);audio.master.gain.setTargetAtTime(0,audio.ctx.currentTime,.02)}$('#player-state').dataset.playing='false';$('#player-state').textContent='MUSIC PAUSED — PRESS START SOUND';updateAudioToggle()}
+      function updateAudioToggle(){const button=$('#audio-toggle');button.textContent=isPlaying?'Ⅱ PAUSE':'▶ SOUND';button.setAttribute('aria-pressed',String(isPlaying))}
+      function stopMusic(){isPlaying=false;stopVoices();if(audio){audio.master.gain.cancelScheduledValues(audio.ctx.currentTime);audio.master.gain.setTargetAtTime(0,audio.ctx.currentTime,.02)}$('#player-state').dataset.playing='false';$('#player-state').textContent='PAUSED';updateAudioToggle()}
       async function startMusic(){
         try{if(audio?.ctx.state==='closed')audio=null;ensureAudio();await audio.ctx.resume();if(audio.ctx.state!=='running')throw new Error('Audio is waiting for a user gesture');if(isPlaying){updateSound();return}isPlaying=true;audio.master.gain.cancelScheduledValues(audio.ctx.currentTime);audio.master.gain.setValueAtTime(.5,audio.ctx.currentTime);updateSound();
           nextStepTime=audio.ctx.currentTime+.03;$('#player-state').dataset.playing='true';$('#player-state').textContent='MUSIC PLAYING';updateAudioToggle();tick();startClock();
           document.removeEventListener('pointerdown',startFromInteraction);document.removeEventListener('pointerup',startFromInteraction);document.removeEventListener('touchstart',startFromInteraction);document.removeEventListener('keydown',startFromInteraction);document.removeEventListener('click',startFromInteraction);
-        }catch(error){$('#player-state').dataset.playing='false';$('#player-state').textContent='PRESS START SOUND TO ENABLE AUDIO';updateAudioToggle();if(error.message!=='Audio is waiting for a user gesture')console.error(error)}
+        }catch(error){$('#player-state').dataset.playing='false';$('#player-state').textContent='CLICK SOUND';updateAudioToggle();if(error.message!=='Audio is waiting for a user gesture')console.error(error)}
       }
       function startFromInteraction(event){if(event.target.closest('#audio-toggle'))return;startMusic()}
       $('#audio-toggle').addEventListener('click',event=>{event.stopPropagation();if(isPlaying)stopMusic();else startMusic()});
@@ -406,11 +412,11 @@
           for(let index=0,time=0;time<duration;index++,time=index*60/tempo/4)scheduleStep(engine,time,index,rack,composition,tempo,steps,drumPattern);
           const buffer=await ctx.startRendering(),url=URL.createObjectURL(writeWav(buffer)),link=document.createElement('a');
           link.href=url;link.download=`sophie-pallas-${tempo}bpm.wav`;link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);
-          button.textContent='WAV SAVED ✓';
+          button.textContent='WAV ✓';
         }catch(error){button.textContent='BOUNCE FAILED — TRY AGAIN';console.error(error)}
-        finally{button.disabled=false;setTimeout(()=>button.textContent='↓ BOUNCE LOOP · 3:00 WAV',2500)}
+        finally{button.disabled=false;setTimeout(()=>button.textContent='↓ WAV',2500)}
       });
-      $('#save-game').addEventListener('click',()=>{const button=$('#save-game');saveGame(true);button.textContent='SAVED ✓';setTimeout(()=>button.textContent='SAVE MIX',1600)});
+      $('#save-game').addEventListener('click',()=>{const button=$('#save-game');saveGame(true);button.textContent='SAVED ✓';setTimeout(()=>button.textContent='SAVE',1600)});
       $('#new-mix').addEventListener('click',()=>{song=makeSong();randomizeNewSession();step=0;setBpm(song.tempo);$('#shop-feedback').textContent='New loop ready. Your rack and notes are still here.';updateSessionLabels();draw();saveGame(true)});
       window.addEventListener('beforeunload',()=>saveGame(true));
       setInterval(()=>{noteProgress+=passiveIncome;const earned=Math.floor(noteProgress);if(earned>0){credits+=earned;noteProgress-=earned}updateEconomy()},1000);
@@ -419,7 +425,7 @@
         $('#loop-style').textContent=`${song.style} · ${song.key}`;
         $('#song-key').textContent=song.key;$('#song-chords').textContent=song.names.join(' · ');
       }
-      song=makeSong();randomizeNewSession();const restored=loadGame();setBpm(bpm);updateSessionLabels();$('#player-state').textContent='PRESS START SOUND TO ENABLE AUDIO';updateAudioToggle();
+      song=makeSong();randomizeNewSession();const restored=loadGame();setBpm(bpm);updateSessionLabels();$('#player-state').textContent='CLICK SOUND';updateAudioToggle();
       draw();hydrated=true;saveGame(true);
       if(restored){$('#shop-feedback').textContent=offlineEarned?`Welcome back — ${offlineEarned} notes earned while you were away.`:'Welcome back — your mix is loaded.'}else $('#shop-feedback').textContent='Click Mimi to earn your first notes.';
       window.__mimiGameReady=true;startMusic();

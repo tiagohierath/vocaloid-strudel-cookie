@@ -1,4 +1,6 @@
-#define AppVersion GetFileContents("VERSION")
+#ifndef AppVersion
+#define AppVersion "0.0.0"
+#endif
 
 [Setup]
 AppId={{B9844BD0-6C1D-4BC2-9FE9-5A0D7B7C4D2E}
