@@ -108,6 +108,24 @@
         return value+'%';
       }
       const synths=[{name:'Cookie Bass',type:'MINIMOOG-STYLE SUBTRACTIVE BASS / STARTER',tone:'bass',cost:0,income:0,owned:true,params:Object.fromEntries(['cutoff','resonance','attack','release','gain'].map((key,i)=>[key,instruments.bass.defaults[i]]))},{name:'Pocket Drums',type:'DRUM SYNTH / STARTER',tone:'drum',cost:0,income:0,owned:true,params:{cutoff:70,resonance:20,attack:0,release:12,gain:70}}];
+      const randomInt=(min,max)=>Math.floor(min+Math.random()*(max-min+1));
+      function randomizeNewSession(){
+        const bass=synths[0],drums=synths[1];
+        bass.params={cutoff:randomInt(38,82),resonance:randomInt(12,62),attack:randomInt(0,18),release:randomInt(10,72),gain:randomInt(58,78)};
+        drums.params={cutoff:randomInt(52,92),resonance:randomInt(8,42),attack:randomInt(0,12),release:randomInt(8,34),gain:randomInt(62,82)};
+        Object.keys(drumPattern).forEach(row=>drumPattern[row].fill(0));
+        [0,4,8,12].forEach(stepIndex=>{if(Math.random()>.25)drumPattern.kick[stepIndex]=1});
+        if(!drumPattern.kick.some(Boolean))drumPattern.kick[randomInt(0,3)*4]=1;
+        [4,12].forEach(stepIndex=>{if(Math.random()>.2)drumPattern.snare[stepIndex]=1});
+        for(let i=0;i<16;i++)if(Math.random()<.48)drumPattern.hat[i]=1;
+        if(!drumPattern.hat.some(Boolean))drumPattern.hat[randomInt(0,15)]=1;
+        sequencerSteps=sequencerSteps.map(()=>Math.random()<.55?1:0);
+        if(sequencerSteps.filter(Boolean).length<3)for(let i=0;i<3;i++)sequencerSteps[randomInt(0,7)]=1;
+        bass.patches=[];
+        const possibleWires=[['LFO','CUTOFF'],['LFO','PITCH'],['ENV','CUTOFF'],['ENV','LEVEL'],['SEQ','CUTOFF'],['SEQ','LEVEL']];
+        possibleWires.sort(()=>Math.random()-.5).slice(0,randomInt(1,2)).forEach(([source,dest])=>bass.patches.push({source,dest}));
+        drums.patches=[];
+      }
       const finite=value=>Number.isFinite(Number(value))?Number(value):0;
       let patchSource=null;
       const ECONOMY_MULTIPLIER=5;
@@ -318,7 +336,7 @@
         finally{button.disabled=false;setTimeout(()=>button.textContent='↓ BOUNCE LOOP · 3:00 WAV',2500)}
       });
       setInterval(()=>{noteProgress+=passiveIncome;const earned=Math.floor(noteProgress);if(earned>0){credits+=earned;noteProgress-=earned}updateEconomy()},1000);
-      song=makeSong();setBpm(song.tempo);$('.status').textContent=song.style+' · Add a synth to grow the loop.';$('#song-key').textContent=song.key;$('#song-chords').textContent=song.names.join(' · ');$('#player-state').textContent='STARTING MUSIC…';
+      song=makeSong();randomizeNewSession();setBpm(song.tempo);$('.status').textContent=song.style+' · Add a synth to grow the loop.';$('#song-key').textContent=song.key;$('#song-chords').textContent=song.names.join(' · ');$('#player-state').textContent='STARTING MUSIC…';
       draw();window.__mimiGameReady=true;startMusic();
     })();
   </script>
