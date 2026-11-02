@@ -234,8 +234,8 @@
         filter.Q.value=.5+p.resonance*.12;
         if(hasPatch('ENV','CUTOFF'))filter.frequency.setValueAtTime(Math.max(90,filter.frequency.value*.22),time);
         if(hasPatch('SEQ','CUTOFF'))filter.frequency.setValueAtTime(filter.frequency.value+500,time);
-        const attack=.005+p.attack*.008,decay=kind==='kick'?.12:.025,release=.04+p.release*.015,end=time+attack+decay+release;
-        const peak=(kind==='kick'?.24:kind==='snare'?.11:.055)*accent;
+        const attack=.005+p.attack*.008,decay=kind==='kick'? .12:.025,release=.04+p.release*.015,end=time+attack+decay+release;
+        const peak=(kind==='kick'? .24:kind==='snare'? .11:.055)*accent;
         envelope.gain.setValueAtTime(0,time);envelope.gain.linearRampToValueAtTime(peak,time+attack);envelope.gain.setValueAtTime(peak,time+attack+decay);envelope.gain.exponentialRampToValueAtTime(.0001,end);
         level.gain.setValueAtTime((p.gain/70)*levelScale(synth),time);
         if(hasPatch('ENV','LEVEL'))level.gain.linearRampToValueAtTime((p.gain/70)*(hasPatch('SEQ','LEVEL')?1.25:1),Math.min(end,time+attack+decay));
