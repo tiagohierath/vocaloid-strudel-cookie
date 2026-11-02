@@ -86,7 +86,7 @@
         const s=song,root=48+s.tonic;s.chords=s.degrees.map(degree=>[0,2,4].map(offset=>root+s.scale[(degree+offset)%7]+12*Math.floor((degree+offset)/7)).map(frequency));s.bass=s.degrees.map(degree=>frequency(root-12+s.scale[degree]));s.names=s.degrees.map(degree=>{const notes=[0,2,4].map(offset=>s.scale[(degree+offset)%7]+12*Math.floor((degree+offset)/7));return ['I','ii','iii','IV','V','vi','vii°'][degree]||String(degree+1)});$('#song-chords').textContent=s.names.join(' · ');
       }
       const instruments={
-        bass:{hint:'Minimoog-style path: oscillator → mixer → low-pass filter → VCA.',defaults:[48,30,0,12,65]},
+        bass:{hint:'Realistic 3-oscillator path: oscillator bank → mixer → low-pass filter → VCA.',defaults:[48,30,0,12,65]},
         lead:{hint:'Melody · quick attack, a held tone, then a short tail.',defaults:[72,12,2,22,60]},
         pluck:{hint:'Plucked notes · a sharp strike that fades even while held.',defaults:[68,15,0,32,60]},
         pad:{hint:'Chord bed · slow swell and a soft, long fade.',defaults:[60,8,65,85,55]},
@@ -107,7 +107,7 @@
         if(param==='gain')return value===0?'−∞ dB':(20*Math.log10(value/100)).toFixed(1)+' dB';
         return value+'%';
       }
-      const synths=[{name:'Cookie Bass',type:'MINIMOOG-STYLE SUBTRACTIVE BASS / STARTER',tone:'bass',cost:0,income:0,owned:true,params:Object.fromEntries(['cutoff','resonance','attack','release','gain'].map((key,i)=>[key,instruments.bass.defaults[i]]))},{name:'Pocket Drums',type:'DRUM SYNTH / STARTER',tone:'drum',cost:0,income:0,owned:true,params:{cutoff:70,resonance:20,attack:0,release:12,gain:70}}];
+      const synths=[{name:'Cookie Bass',type:'REALISTIC 3-OSC SUBTRACTIVE BASS / STARTER',tone:'bass',realistic:true,cost:0,income:0,owned:true,params:Object.fromEntries(['cutoff','resonance','attack','release','gain'].map((key,i)=>[key,instruments.bass.defaults[i]]))},{name:'Pocket Drums',type:'DRUM SYNTH / STARTER',tone:'drum',cost:0,income:0,owned:true,params:{cutoff:70,resonance:20,attack:0,release:12,gain:70}}];
       const randomInt=(min,max)=>Math.floor(min+Math.random()*(max-min+1));
       function randomizeNewSession(){
         const bass=synths[0],drums=synths[1];
@@ -212,6 +212,13 @@
         if(hasPatch('ENV','LEVEL'))level.gain.linearRampToValueAtTime((p.gain/100)*(hasPatch('SEQ','LEVEL')?1.25:1),Math.min(end,time+attack+decay));
         const pan=ctx.createStereoPanner();pan.pan.value=({pluck:-.25,glass:.3,pad:-.15,organ:.15,glitch:.4,fm:-.3})[synth.tone]||0;osc.connect(envelope).connect(filter).connect(level).connect(pan).connect(engine.master);
         const nodes=[osc,envelope,filter,level,pan],sources=[osc];
+        if(synth.realistic){
+          const osc2=ctx.createOscillator(),osc3=ctx.createOscillator(),mix2=ctx.createGain(),mix3=ctx.createGain();
+          osc2.type='sawtooth';osc3.type='triangle';osc2.frequency.value=freq*1.003;osc3.frequency.value=freq*.5;
+          osc2.detune.value=7;osc3.detune.value=-5;mix2.gain.value=.42;mix3.gain.value=.3;
+          osc2.connect(mix2).connect(envelope);osc3.connect(mix3).connect(envelope);
+          nodes.push(osc2,osc3,mix2,mix3);sources.push(osc2,osc3);
+        }
         const patches=synth.patches||[];
         if(hasPatch('ENV','PITCH')||hasPatch('SEQ','PITCH')){
           osc.detune.setValueAtTime(7,time);osc.detune.linearRampToValueAtTime(0,Math.min(end,time+attack+decay));
