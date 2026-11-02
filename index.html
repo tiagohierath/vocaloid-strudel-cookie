@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sophie Pallas</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#fff;color:#111;font:16px/1.45 Arial,sans-serif}header{min-height:66px;padding:10px 20px;border-bottom:2px solid #111;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.brand{font-weight:bold}.topmeta,.player{display:flex;align-items:center;gap:10px;flex-wrap:wrap}button{font:inherit;cursor:pointer;color:#111;background:#fff;border:2px solid #111;padding:8px 12px}button:hover{background:#f4f4f4}button:disabled{opacity:.55;cursor:default}.credits{font-weight:bold}main{display:grid;grid-template-columns:minmax(230px,1fr) minmax(320px,1.3fr) minmax(250px,1fr);min-height:calc(100vh - 66px)}.col{padding:22px;border-right:2px solid #111;min-width:0}.col:last-child{border:0}.eyebrow{font-size:13px;font-weight:bold;margin-bottom:6px}.title{font-size:25px;margin:0 0 18px}.avatar-wrap{height:390px;display:grid;place-items:center;cursor:pointer}.avatar{height:min(390px,100%);max-width:100%;object-fit:contain}.click-hint{text-align:center;font-weight:bold}.status{text-align:center;margin-top:16px}.tagrow{display:flex;justify-content:center;gap:10px;margin-top:12px;flex-wrap:wrap}.tag{border:1px solid #111;padding:4px 8px}.bpm-control{display:flex;align-items:center;justify-content:center;gap:12px;margin:20px auto 0}.bpm-control small{font-weight:bold}.dial{display:block;width:48px;height:48px;border:2px solid #111;border-radius:50%;background:#ffd9e8;position:relative;cursor:ns-resize;touch-action:none;user-select:none}.dial:after{content:"";position:absolute;inset:9px;border:1px solid #111;border-radius:50%;background:#fff}.dial:before{content:"";position:absolute;width:3px;height:14px;background:#111;top:2px;left:21px;z-index:1;transform-origin:bottom center;transform:rotate(var(--angle,-45deg))}.rack-head{display:flex;justify-content:space-between;align-items:start}.synth{border:2px solid #111;margin:12px 0;padding:12px;background:#fff}.synth-top{display:flex;align-items:start;justify-content:space-between;gap:10px;margin-bottom:12px}.synth-name{font-weight:bold;font-size:18px}.synth-type{font-size:12px}.power{width:13px;height:13px;border:2px solid #111;background:#b8f4b0}.controls{display:flex;flex-wrap:wrap;gap:15px}.knob{text-align:center;min-width:58px;font-size:12px;font-weight:bold}.knob .dial{width:42px;height:42px;margin:0 auto 5px;background:#ffe695}.knob .dial:after{inset:8px}.knob .dial:before{left:18px}.meter{margin-left:auto;align-self:center;letter-spacing:2px}.add{width:100%;border-style:dashed}.balance{display:flex;justify-content:space-between;border:2px solid #111;padding:10px;margin-bottom:12px}.shop-card{border:2px solid #111;padding:12px;margin:12px 0}.card-line{display:flex;justify-content:space-between;gap:10px;font-weight:bold;font-size:17px}.shop-desc{margin:7px 0 12px}.buy{width:100%;font-weight:bold}.feedback{min-height:1.5em;font-size:13px;margin-top:8px}.footer-note{margin-top:16px;font-size:13px}.player-state{min-width:150px;font-size:13px}.player-state[data-playing="true"]{font-weight:bold;color:#176b17}@media(max-width:850px){main{grid-template-columns:1fr}.col{border-right:0;border-bottom:2px solid #111}.avatar-wrap{height:330px}.topmeta{width:100%;justify-content:space-between}.player-state{min-width:auto}}
+    .synth.is-muted{opacity:.5}.archive-list{border-top:1px solid #111;margin-top:20px;padding-top:10px}.archived-item{display:flex;justify-content:space-between;align-items:center;margin:6px 0;font-size:13px}.archived-item button,.mute-synth,.archive-synth{font-size:12px;padding:4px 7px}.avatar{height:780px;max-height:none;max-width:200%;width:auto}.avatar-wrap{height:520px}.avatar.pop{animation:pop .24s ease-out}.synth{border-color:#d889b4;background:#fff8fc}.synth:nth-child(2n){border-color:#83b9d8;background:#f8fcff}.synth-name:before{content:'♡ ';color:#e978aa}.synth-type{color:#777}.power{width:18px;height:18px;border-radius:50%;background:#b8f4b0;position:relative}.power:after{content:'•ᴗ•';position:absolute;font-size:8px;left:1px;top:0;color:#111}.synth .dial{border-color:#111}.synth .dial:after{content:'✦';font-size:12px;text-align:center;line-height:24px;color:#e978aa}.mute-synth{background:#ffe5f0}.archive-synth{background:#e7f4ff}@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.035)}100%{transform:scale(1)}}
+    .synth.tone-bass{border-color:#9b59b6;background:#faf5ff}.synth.tone-lead{border-color:#ed709d;background:#fff5f8}.synth.tone-pluck{border-color:#e5b32f;background:#fffdf0}.synth.tone-pad{border-color:#62a9b7;background:#f3fdff}.synth.tone-logic{border-color:#5c61d6;background:#f3f4ff}.synth.tone-box{border-color:#83b9d8;background:#f8fcff}.tone-bass .synth-name:before{content:'● ';color:#9b59b6}.tone-lead .synth-name:before{content:'★ ';color:#ed709d}.tone-pluck .synth-name:before{content:'◆ ';color:#e5b32f}.tone-pad .synth-name:before{content:'☁ ';color:#62a9b7}.tone-logic .synth-name:before{content:'⌘ ';color:#5c61d6}.tone-bass .dial{background:#e5c8ff}.tone-lead .dial{background:#ffc7dc}.tone-pluck .dial{background:#ffe7a0}.tone-pad .dial{background:#bcecf2}.tone-logic .dial{background:#c9ccff}.shop-card.locked{color:#999;background:#f1f1f1!important;border-color:#aaa!important;filter:grayscale(1)}.shop-card.locked .shop-desc{color:#999}.shop-card.locked .buy{color:#777;border-color:#aaa}
+  .progression{border-top:1px solid #111;margin-top:18px;padding-top:12px}.progression strong{display:block;font-size:13px;margin-bottom:8px}.progression button{font-size:12px;padding:6px;margin:3px}.progression button.active{background:#111;color:#fff}.step-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin:10px 0}.step{padding:6px 2px;font-size:11px}.step.active{background:#111;color:#fff}.drum-grid{margin-top:18px;border-top:1px solid #111;padding-top:12px}.drum-row{display:grid;grid-template-columns:42px repeat(16,1fr);gap:3px;align-items:center;margin:4px 0}.drum-row span{font-size:11px;font-weight:bold}.drum-step{padding:7px 0;border:1px solid #111;background:#fff}.drum-step.active{background:#111;color:#fff}.drum-step.playing{outline:2px solid #ed709d;outline-offset:-2px}
+  .dial:focus-visible{outline:3px solid #111;outline-offset:3px}
+  .avatar{max-width:100%;max-height:100%;height:100%;pointer-events:none}.avatar-wrap{overflow:hidden}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">♪ SOPHIE PALLAS</div>
+    <div class="topmeta">
+      <div class="player"><button id="play" type="button">▶ PLAY</button><button id="stop" type="button">Ⅱ PAUSE</button><button id="render-wav" type="button">↓ BOUNCE LOOP · 3:00 WAV</button><span id="player-state" class="player-state">STARTING…</span></div>
+      <span>♪ NOTES: <span id="credits">0</span></span>
+    </div>
+  </header>
+  <main>
+    <section class="col girl-col">
+      <div class="avatar-wrap" id="click-target" title="Click Mimi to earn notes"><img class="avatar" src="girl-reference.png" alt="Mimi, the floating synth girl"></div>
+      <div class="click-hint">CLICK MIMI TO EARN NOTES</div><div class="status">Earn notes. Build your rack. Shape the loop.</div>
+      <div class="tagrow"><div class="tag">+<span id="click-power">1</span> / CLICK</div><div class="tag">KEY: <span id="song-key">C</span></div><div class="tag">CHORDS: <span id="song-chords">I V vi IV</span></div></div>
+      <div class="bpm-control"><div class="dial" id="bpm-dial" role="slider" aria-orientation="vertical" tabindex="0" aria-label="Tempo" aria-valuemin="20" aria-valuemax="180" aria-valuenow="108"></div><strong>BPM <span id="bpm-value">108</span></strong><small>DRAG OR CLICK</small></div>
+    </section>
+    <section class="col rack">
+      <div class="rack-head"><div><div class="eyebrow">02 / LIVE RACK</div><h2 class="title">SYNTHS</h2></div><div id="owned-count">1 synth</div></div>
+      <div id="rack-items"><article class="synth tone-bass" data-index="0"><div class="synth-top"><div><div class="synth-name">Cookie Bass</div><div class="synth-type">ACID BASS / STARTER</div></div><div class="power">•ᴗ•</div></div><div class="controls"><div class="knob"><div class="dial synth-dial" data-param="cutoff" tabindex="0"></div>CUTOFF</div><div class="knob"><div class="dial synth-dial" data-param="delay" tabindex="0"></div>DRIVE</div><div class="knob"><div class="dial synth-dial" data-param="reverb" tabindex="0"></div>SUB</div><div class="knob"><div class="dial synth-dial" data-param="gain" tabindex="0"></div>GAIN</div></div><div><button type="button" class="mute-synth">MUTE</button> <button type="button" class="archive-synth">ARCHIVE</button></div></article></div>
+      <div id="archive-items" class="archive-list"></div>
+    </section>
+    <section class="col shop">
+      <div class="eyebrow">03 / THE MARKET</div><h2 class="title">BUY SYNTHS</h2>
+      <div class="balance"><span>YOUR BALANCE</span><strong>♪ <span id="balance">0</span> NOTES</strong></div>
+      <div class="shop-card" data-name="Star Sprinkle" data-cost="30" data-income="1" data-type="SWEET LEAD / +1 NOTE PER SECOND"><div class="card-line"><span>Star Sprinkle</span><span>✦ 30</span></div><div class="shop-desc">A bright little lead for the melody.</div><button class="buy" type="button">BUY SYNTH</button></div>
+      <div class="shop-card" data-name="Neon Wafer" data-cost="75" data-income="3" data-type="CRISP PLUCK / +3 NOTES PER SECOND"><div class="card-line"><span>Neon Wafer</span><span>✦ 75</span></div><div class="shop-desc">Crisp digital plucks with a little crackle.</div><button class="buy" type="button">BUY SYNTH</button></div>
+      <div class="shop-card" data-name="Velvet Crumb" data-cost="150" data-income="7" data-type="SOFT PAD / +7 NOTES PER SECOND"><div class="card-line"><span>Velvet Crumb</span><span>✦ 150</span></div><div class="shop-desc">Soft and wide, for the space between words.</div><button class="buy" type="button">BUY SYNTH</button></div>
+      <div class="shop-card" data-name="Moon Glass" data-cost="240" data-income="10" data-type="SHIMMER SYNTH / +10 NOTES PER SECOND"><div class="card-line"><span>Moon Glass</span><span>✦ 240</span></div><div class="shop-desc">Fragile high notes that hang in the air.</div><button class="buy" type="button">BUY SYNTH</button></div>
+      <div class="shop-card" data-name="FM Goblin" data-cost="330" data-income="14" data-type="FM MACHINE / +14 NOTES PER SECOND"><div class="card-line"><span>FM Goblin</span><span>✦ 330</span></div><div class="shop-desc">Metallic bells and strange little sidebands.</div><button class="buy" type="button">BUY SYNTH</button></div>
+      <div class="shop-card" data-name="Vocal Bubble" data-cost="450" data-income="18" data-type="FORMANT VOICE / +18 NOTES PER SECOND"><div class="card-line"><span>Vocal Bubble</span><span>✦ 450</span></div><div class="shop-desc">A soft synthetic voice hiding in the mix.</div><button class="buy" type="button">BUY SYNTH</button></div>
+      <div class="shop-card" data-name="Glitch Bean" data-cost="600" data-income="24" data-type="GLITCH BOX / +24 NOTES PER SECOND"><div class="card-line"><span>Glitch Bean</span><span>✦ 600</span></div><div class="shop-desc">Tiny broken sparks for the edges of the beat.</div><button class="buy" type="button">BUY SYNTH</button></div>
+      <div class="shop-card" data-name="Pocket Organ" data-cost="800" data-income="30" data-type="ORGAN MACHINE / +30 NOTES PER SECOND"><div class="card-line"><span>Pocket Organ</span><span>✦ 800</span></div><div class="shop-desc">A warm little room of sustained chords.</div><button class="buy" type="button">BUY SYNTH</button></div>
+      <div class="shop-card" data-name="Logic Lab" data-cost="1100" data-income="40" data-type="SEQUENCER SYNTH / +40 NOTES PER SECOND"><div class="card-line"><span>Logic Lab</span><span>♪ 1100 NOTES</span></div><div class="shop-desc">A melodic voice following the shared eight-step pattern.</div><button class="buy" type="button">BUY SYNTH</button></div>
+      <div class="shop-card" data-name="Pocket Sequencer" data-cost="45" data-income="2" data-type="8 STEP SEQUENCER / +2 NOTES PER SECOND"><div class="card-line"><span>Pocket Sequencer</span><span>♪ 45 NOTES</span></div><div class="shop-desc">Eight eighth notes per bar. Toggle steps to shape the melody.</div><button class="buy" type="button">BUY SYNTH</button></div>
+      <div class="shop-card" data-name="Atlas Sequencer" data-cost="2400" data-income="85" data-type="STEP SYNTH / +85 NOTES PER SECOND"><div class="card-line"><span>Atlas Sequencer</span><span>♪ 2400 NOTES</span></div><div class="shop-desc">Another voice for the shared eight-step pattern.</div><button class="buy" type="button">BUY SYNTH</button></div>
+      <div id="shop-feedback" class="feedback" aria-live="polite">Click Mimi to earn your first notes.</div>
+    </section>
+  </main>
+  <script src="dials.js"></script>
+  <script>
+    (()=>{
+      const $=selector=>document.querySelector(selector);
+      let credits=5000, clickPower=1, passiveIncome=.1, noteProgress=0, bpm=108, audio=null, clock=null, isPlaying=false, step=0, archived=[],song=null,sequencerSteps=[1,0,1,0,0,1,0,1];
+      const drumPattern={kick:[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],snare:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],hat:[0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1]};
+      const frequency=midi=>440*Math.pow(2,(midi-69)/12);
+      function makeSong(){
+        const ideas=[
+          {style:'SUNLIT POP',mode:'major',scale:[0,2,4,5,7,9,11],degrees:[0,4,5,3],tempo:112,swing:0,kicks:[0,4,8,12],hats:[2,6,10,14],snare:[4,12]},
+          {style:'DREAM HOUSE',mode:'minor',scale:[0,2,3,5,7,8,10],degrees:[0,5,2,6],tempo:120,swing:0,kicks:[0,4,8,12],hats:[2,6,10,14],snare:[4,12]},
+          {style:'LATE-NIGHT GROOVE',mode:'dorian',scale:[0,2,3,5,7,9,10],degrees:[0,3,0,6],tempo:92,swing:.12,kicks:[0,6,10],hats:[0,2,4,6,8,10,12,14],snare:[4,12]},
+          {style:'BROKEN GLASS',mode:'minor',scale:[0,2,3,5,7,8,10],degrees:[0,3,5,4],tempo:104,swing:.06,kicks:[0,7,10],hats:[2,5,6,10,13,14],snare:[4,12]}
+        ];
+        const idea=ideas[Math.floor(Math.random()*ideas.length)],tonic=[0,2,5,7,9][Math.floor(Math.random()*5)],root=48+tonic;
+        const names=['C','C♯','D','E♭','E','F','F♯','G','A♭','A','B♭','B'];
+        const triads=idea.degrees.map(degree=>[0,2,4].map(offset=>root+idea.scale[(degree+offset)%7]+12*Math.floor((degree+offset)/7)));
+        // Keep the chord voices close together so changes flow without large jumps.
+        const voiced=triads.map(notes=>notes.map(note=>note>67?note-12:note).sort((a,b)=>a-b));
+        const motifs=[[0,1,2,1,0,2,1,0],[2,1,0,1,2,0,1,2],[0,0,2,1,0,1,2,1]];
+        return {...idea,key:names[tonic]+' '+idea.mode,
+          names:triads.map(notes=>names[notes[0]%12]+(notes[1]-notes[0]===3?(notes[2]-notes[0]===6?'dim':'m'):'')),
+          chords:voiced.map(notes=>notes.map(frequency)),bass:idea.degrees.map(degree=>frequency(root-12+idea.scale[degree])),
+          motif:motifs[Math.floor(Math.random()*motifs.length)]};
+      }
+      const instruments={
+        bass:{hint:'Short low notes · cutoff opens the buzz; resonance adds bite.',defaults:[48,30,0,12,65]},
+        lead:{hint:'Melody · quick attack, a held tone, then a short tail.',defaults:[72,12,2,22,60]},
+        pluck:{hint:'Plucked notes · a sharp strike that fades even while held.',defaults:[68,15,0,32,60]},
+        pad:{hint:'Chord bed · slow swell and a soft, long fade.',defaults:[60,8,65,85,55]},
+        glass:{hint:'Bell notes · metal adds overtones; release lets them ring.',character:'METAL',defaults:[85,35,0,85,50]},
+        fm:{hint:'Metallic melody · FM depth moves from pure to bright and clangy.',character:'FM DEPTH',defaults:[80,45,0,45,55]},
+        vocal:{hint:'Synthetic choir · vowel moves from oo to ah to ee.',character:'VOWEL',defaults:[85,40,35,60,55]},
+        glitch:{hint:'Short digital ticks · attack softens the click; release adds a tail.',defaults:[82,25,0,3,45]},
+        organ:{hint:'Held chords · immediate tone, steady body, short release.',defaults:[65,5,0,8,50]},
+        logic:{hint:'Eight steps trigger notes · attack and release shape each step.',defaults:[68,12,1,18,55]},
+        box:{hint:'Simple triangle notes · cutoff darkens the tone.',defaults:[65,10,1,20,55]}
+      };
+      const controlLabel=(synth,param)=>param==='resonance'?(instruments[synth.tone]?.character||'RESONANCE'):param==='gain'?'LEVEL':param.toUpperCase();
+      function formatParam(param,value){
+        if(param==='cutoff'){const hz=80*Math.pow(150,value/100);return hz>=1000?(hz/1000).toFixed(1)+' kHz':Math.round(hz)+' Hz'}
+        if(param==='attack')return Math.round(5+value*8)+' ms';
+        if(param==='release')return Math.round(40+value*15)+' ms';
+        if(param==='gain')return value===0?'−∞ dB':(20*Math.log10(value/100)).toFixed(1)+' dB';
+        return value+'%';
+      }
+      const synths=[{name:'Cookie Bass',type:'ACID BASS / STARTER',tone:'bass',cost:0,income:0,owned:true,params:Object.fromEntries(['cutoff','resonance','attack','release','gain'].map((key,i)=>[key,instruments.bass.defaults[i]]))},{name:'Pocket Drums',type:'DRUM SYNTH / STARTER',tone:'drum',cost:0,income:0,owned:true,params:{cutoff:70,resonance:20,attack:0,release:12,gain:70}}];
+      const finite=value=>Number.isFinite(Number(value))?Number(value):0;
+      function updateEconomy(){
+        credits=finite(credits);passiveIncome=Math.max(0,finite(passiveIncome));
+        $('#credits').textContent=Math.floor(credits);$('#balance').textContent=Math.floor(credits);$('#click-power').textContent=Math.floor(clickPower);
+        document.querySelectorAll('.buy').forEach(button=>{const card=button.closest('.shop-card'),baseCost=Number(card.dataset.cost),cost=Math.ceil(baseCost*Math.pow(1.42,Math.max(0,synths.length+archived.length-1)));const owned=card.dataset.owned==='true';const locked=!owned&&credits<cost;button.disabled=owned||locked;card.classList.toggle('locked',locked);card.querySelector('.card-line span:last-child').textContent=`♪ ${cost} NOTES`;button.textContent=owned?'OWNED ✓':locked?`NEED ${Math.ceil(cost-credits)} MORE NOTES`:'BUY SYNTH'});
+      }
+      function draw(){
+        updateEconomy();
+        $('#owned-count').textContent=`${synths.length} synth${synths.length===1?'':'s'}`;
+        $('#rack-items').innerHTML=synths.map((synth,index)=>{const maxControls=5;const grid=synth.tone==='logic'?'<div class="synth-type">MELODY STEPS · 8 NOTES</div><div class="step-grid">'+sequencerSteps.map((active,stepIndex)=>`<button type="button" class="step ${active?'active':''}" data-step="${stepIndex}" aria-pressed="${!!active}">${stepIndex+1}</button>`).join('')+'</div>':synth.tone==='drum'?'<div class="synth-type">DRUM LOOP · 16 STEPS</div>'+Object.entries(drumPattern).map(([row,pattern])=>`<div class="drum-row"><span>${row.toUpperCase()}</span>${pattern.map((active,stepIndex)=>`<button type="button" class="drum-step ${active?'active':''}" data-drum-row="${row}" data-drum-step="${stepIndex}" aria-label="${row} step ${stepIndex+1}" aria-pressed="${!!active}">${stepIndex%4===0?stepIndex/4+1:'·'}</button>`).join('')}</div>`).join(''):'';return `<article class="synth tone-${synth.tone||'box'} ${synth.muted?'is-muted':''}" data-index="${index}"><div class="synth-top"><div><div class="synth-name">${synth.name}</div><div class="synth-type">${synth.type}</div><div class="synth-type">${instruments[synth.tone]?.hint||'A small drum voice with its own loop.'}</div></div><div class="power" aria-label="${synth.muted?'Muted':'Powered on'}"></div></div><div class="controls">${Object.entries(synth.params).slice(0,maxControls).map(([param,value])=>`<label class="knob"><div class="dial synth-dial" role="slider" aria-orientation="vertical" tabindex="0" aria-label="${controlLabel(synth,param)}" aria-valuetext="${formatParam(param,value)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${value}" data-param="${param}" style="--angle:${-135+value*2.7}deg"></div>${controlLabel(synth,param)}<br><span>${formatParam(param,value)}</span></label>`).join('')}</div>${grid}<div><button type="button" class="mute-synth">${synth.muted?'UNMUTE':'MUTE'}</button> <button type="button" class="archive-synth">ARCHIVE</button></div></article>`}).join('');
+        $('#archive-items').innerHTML=archived.length?archived.map((synth,index)=>`<div class="archived-item"><span>${synth.name}</span><button type="button" class="restore-synth" data-index="${index}">RESTORE</button></div>`).join(''):'<span>Nothing archived.</span>';
+        bindDials();updateSound();
+      }
+      function addOwnedSynth({name,type,cost=0,income=0}){const tone=name.includes('Drum')?'drum':name.includes('Star')?'lead':name.includes('Neon')?'pluck':name.includes('Velvet')?'pad':name.includes('Moon')?'glass':name.includes('FM')?'fm':name.includes('Vocal')?'vocal':name.includes('Glitch')?'glitch':name.includes('Organ')?'organ':name.includes('Logic')||name.includes('Sequencer')?'logic':'box',params=Object.fromEntries(['cutoff','resonance','attack','release','gain'].map((key,i)=>[key,instruments[tone]?.defaults[i]??[65,20,0,12,60][i]]));synths.push({name,type,tone,envelope:tone==='lead'||tone==='pad'||tone==='glass'||tone==='vocal'||tone==='logic'?'adsr':'pluck',cost,income,owned:true,params});passiveIncome+=income;clickPower+=1;draw()}
+      document.addEventListener('click',event=>{const stepButton=event.target.closest('.step');if(stepButton){const index=Number(stepButton.dataset.step);sequencerSteps[index]=sequencerSteps[index]?0:1;document.querySelectorAll(`[data-step="${index}"]`).forEach(button=>{button.classList.toggle('active',!!sequencerSteps[index]);button.setAttribute('aria-pressed',!!sequencerSteps[index])});return}const mute=event.target.closest('.mute-synth');if(mute){const synth=synths[Number(mute.closest('.synth').dataset.index)];synth.muted=!synth.muted;draw();return}const archive=event.target.closest('.archive-synth');if(archive){const index=Number(archive.closest('.synth').dataset.index),synth=synths.splice(index,1)[0];archived.push(synth);passiveIncome-=synth.income;draw();return}const restore=event.target.closest('.restore-synth');if(restore){const synth=archived.splice(Number(restore.dataset.index),1)[0];synths.push(synth);passiveIncome+=synth.income;draw()}});
+      document.addEventListener('click',event=>{const drumButton=event.target.closest('.drum-step');if(!drumButton)return;const row=drumButton.dataset.drumRow,index=Number(drumButton.dataset.drumStep);drumPattern[row][index]=drumPattern[row][index]?0:1;draw()});
+      $('#click-target').addEventListener('click',event=>{if(event.target.closest('#click-target')===event.currentTarget){credits+=clickPower;updateEconomy();const avatar=$('#click-target .avatar');avatar.classList.remove('pop');void avatar.offsetWidth;avatar.classList.add('pop')}});
+      document.querySelectorAll('.shop-card').forEach(card=>card.querySelector('.buy').addEventListener('click',()=>{
+        const cost=Math.ceil(Number(card.dataset.cost)*Math.pow(1.42,Math.max(0,synths.length+archived.length-1)));if(card.dataset.owned==='true'||credits<cost)return;card.dataset.owned='true';credits-=cost;addOwnedSynth({name:card.dataset.name,type:card.dataset.type,cost,income:Number(card.dataset.income)});card.querySelector('.buy').textContent='OWNED ✓';card.querySelector('.buy').disabled=true;card.dataset.owned='true';draw();$('#shop-feedback').textContent=`${card.dataset.name} added to your rack! Your new voice follows the same key and tempo.`;
+      }));
+      function changeParam(dial,value){const index=Number(dial.closest('.synth').dataset.index),param=dial.dataset.param;if(!synths[index]||synths[index].params[param]===undefined)return;synths[index].params[param]=Math.max(0,Math.min(100,value));const current=synths[index].params[param];dial.setAttribute('aria-valuenow',current);dial.style.setProperty('--angle',`${-135+current*2.7}deg`);const valueLabel=dial.parentElement.querySelector('span');if(valueLabel)valueLabel.textContent=formatParam(param,current);dial.setAttribute('aria-valuetext',formatParam(param,current));if(audio&&audio.ctx.state==='running')updateSound()}
+      function bindDials(){document.querySelectorAll('.synth-dial').forEach(dial=>{
+        const synth=synths[Number(dial.closest('.synth').dataset.index)];
+        bindDial(dial,()=>synth.params[dial.dataset.param],value=>changeParam(dial,value));
+      })}
+      const bpmDial=$('#bpm-dial');
+      function setBpm(value){
+        const next=Math.max(20,Math.min(180,Math.round(value))),changed=next!==bpm;
+        bpm=next;$('#bpm-value').textContent=bpm;bpmDial.setAttribute('aria-valuenow',bpm);
+        bpmDial.style.setProperty('--angle',`${-135+(bpm-20)/160*270}deg`);
+        if(song)song.tempo=bpm;
+        if(isPlaying&&changed)startClock();
+      }
+      bindDial(bpmDial,()=>bpm,setBpm,20,180,8);setBpm(bpm);
+      function createAudio(ctx){
+        const master=ctx.createGain(),limiter=ctx.createDynamicsCompressor();
+        master.gain.value=.5;limiter.threshold.value=-10;limiter.ratio.value=6;
+        master.connect(limiter).connect(ctx.destination);
+        return {ctx,master,voices:new Set()};
+      }
+      function updateSound(){
+        if(!audio)return;
+        audio.master.gain.setTargetAtTime(isPlaying&&synths.some(s=>!s.muted&&s.params.gain>0)?.5:0,audio.ctx.currentTime,.02);
+        for(const voice of audio.voices){
+          const synth=voice.synth;
+          if(!synth)continue;
+          if(!synths.includes(synth)||synth.muted){voice.stop();continue;}
+          voice.filter.frequency.setTargetAtTime(80*Math.pow(150,synth.params.cutoff/100),audio.ctx.currentTime,.02);
+          voice.filter.Q.setTargetAtTime(['fm','glass','vocal'].includes(synth.tone)? .7 : .5+synth.params.resonance*.12,audio.ctx.currentTime,.02);
+          voice.level.gain.setTargetAtTime(synth.params.gain/100,audio.ctx.currentTime,.02);
+        }
+      }
+      function ensureAudio(){if(!audio)audio=createAudio(new(window.AudioContext||window.webkitAudioContext)());return audio}
+      function stopVoices(){if(audio)for(const voice of [...audio.voices])voice.stop()}
+      function playVoice(engine,synth,freq,time,duration,mix=1,accent=1){
+        const {ctx}=engine,p=synth.params,osc=ctx.createOscillator(),filter=ctx.createBiquadFilter(),envelope=ctx.createGain(),level=ctx.createGain();
+        const waves={bass:'sawtooth',lead:'triangle',pluck:'square',pad:'sine',glass:'sine',fm:'sine',vocal:'sawtooth',glitch:'square',organ:'square',logic:'triangle',box:'triangle'};
+        osc.type=waves[synth.tone]||'triangle';osc.frequency.value=freq;
+        filter.type='lowpass';filter.frequency.value=80*Math.pow(150,p.cutoff/100);filter.Q.value=['fm','glass','vocal'].includes(synth.tone)? .7 : .5+p.resonance*.12;
+        const attack=.005+p.attack*.008,release=.04+p.release*.015,hold=Math.max(duration,attack),end=time+hold+release;
+        const percussive=['bass','pluck','glass','fm','glitch','box'].includes(synth.tone);
+        envelope.gain.setValueAtTime(0,time);envelope.gain.linearRampToValueAtTime(.10*mix*accent,time+attack);
+        if(percussive){
+          envelope.gain.exponentialRampToValueAtTime(.0001,end);
+        }else{
+          envelope.gain.linearRampToValueAtTime(.075*mix*accent,time+attack+(hold-attack)*.25);
+          envelope.gain.setValueAtTime(.075*mix*accent,time+hold);envelope.gain.linearRampToValueAtTime(0,end);
+        }
+        level.gain.value=p.gain/100;
+        const pan=ctx.createStereoPanner();pan.pan.value=({pluck:-.25,glass:.3,pad:-.15,organ:.15,glitch:.4,fm:-.3})[synth.tone]||0;osc.connect(envelope).connect(filter).connect(level).connect(pan).connect(engine.master);
+        const nodes=[osc,envelope,filter,level,pan],sources=[osc];
+        if(synth.tone==='fm'||synth.tone==='glass'){
+          const mod=ctx.createOscillator(),amount=ctx.createGain();mod.frequency.value=freq*(synth.tone==='fm'?3:2);
+          amount.gain.setValueAtTime(freq*(p.resonance/100)*4,time);amount.gain.linearRampToValueAtTime(0,end);
+          mod.connect(amount).connect(osc.frequency);nodes.push(mod,amount);sources.push(mod);
+        }
+        if(synth.tone==='vocal'){
+          osc.disconnect();
+          const vowel=p.resonance/100;
+          const centers=vowel<.5?[350+900*vowel,800+800*vowel]:[800-1000*(vowel-.5),1200+2400*(vowel-.5)];
+          centers.forEach(center=>{const formant=ctx.createBiquadFilter(),weight=ctx.createGain();formant.type='bandpass';formant.frequency.value=center;formant.Q.value=5;weight.gain.value=.5;osc.connect(formant).connect(weight).connect(envelope);nodes.push(formant,weight)});
+        }
+        let ended=false;
+        const voice={synth,filter,level,stop:()=>{if(ended)return;ended=true;for(const source of sources){try{source.stop()}catch{}}for(const node of nodes)node.disconnect();engine.voices.delete(voice)}};
+        engine.voices.add(voice);osc.onended=voice.stop;
+        for(const source of sources){source.start(time);source.stop(end+.01)}
+      }
+      function drum(engine,time,kind,accent=1){
+        const {ctx}=engine,gain=ctx.createGain(),filter=ctx.createBiquadFilter();
+        let source;
+        if(kind==='kick'){
+          source=ctx.createOscillator();source.frequency.setValueAtTime(130,time);source.frequency.exponentialRampToValueAtTime(45,time+.12);
+          filter.type='lowpass';filter.frequency.value=1000;
+        }else{
+          if(!engine.noise){engine.noise=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*.2),ctx.sampleRate);const data=engine.noise.getChannelData(0);let seed=12345;for(let i=0;i<data.length;i++){seed=(seed*1664525+1013904223)>>>0;data[i]=seed/2147483648-1}}
+          source=ctx.createBufferSource();source.buffer=engine.noise;filter.type=kind==='hat'?'highpass':'bandpass';filter.frequency.value=kind==='hat'?7500:1800;
+        }
+        const duration=kind==='hat'?.045:.18;
+        gain.gain.setValueAtTime((kind==='kick'?.24:kind==='snare'?.11:.055)*accent,time);gain.gain.exponentialRampToValueAtTime(.0001,time+duration);
+        source.connect(filter).connect(gain).connect(engine.master);source.start(time);source.stop(time+duration+.01);
+        const voice={stop:()=>{try{source.stop()}catch{}source.disconnect();filter.disconnect();gain.disconnect();engine.voices.delete(voice)}};
+        engine.voices.add(voice);source.onended=voice.stop;
+      }
+      function scheduleStep(engine,time,index,rack,composition,tempo,steps,drums=drumPattern){
+        const active=rack.filter(s=>!s.muted&&s.params.gain>0);
+        const bar=Math.floor(index/16)%4,position=index%16,phrase=Math.floor(index/64),beat=60/tempo,chord=composition.chords[bar];
+        const mix=1/Math.sqrt(Math.max(1,active.length*.65)),motif=composition.motif;
+        // Odd eighths lean back slightly; the quarter-note pulse stays exact.
+        const when=time+(position%4===2?composition.swing*beat:0);
+        for(const synth of active){
+          const note=(freq,length=beat*.2,accent=1)=>playVoice(engine,synth,freq,when,length,mix,accent);
+          if(['pad','organ','vocal'].includes(synth.tone)){
+            if(position===0)chord.forEach(freq=>playVoice(engine,synth,freq,time,beat*3.5,mix/Math.sqrt(3),.75));
+          }else if(synth.tone==='bass'){
+            if(composition.kicks.includes(position)||(position===14&&bar===3))note(composition.bass[bar]*(position===14?2:1),beat*.45,position===0?1:.8);
+          }else if(synth.tone==='logic'){
+            if(position%2===0&&steps[position/2])note(chord[motif[(position/2+phrase)%8]]*2);
+          }else if(synth.tone==='lead'){
+            if([0,3,6,10].includes(position)||(bar===3&&position===14))note(chord[motif[(Math.floor(position/2)+phrase)%8]]*2,beat*.6,position===0?1:.75);
+          }else if(synth.tone==='glass'){
+            if(position===2||(bar%2===1&&position===12))note(chord[(bar+phrase)%3]*4,beat*.3,.65);
+          }else if(synth.tone==='glitch'){
+            if([3,11,15].includes(position))note(chord[(position+phrase)%3]*4,beat*.08,.45);
+          }else if(synth.tone==='fm'){
+            if([2,8,14].includes(position))note(chord[(bar+position/2+phrase)%3]*2,beat*.3,.8);
+          }else if(position%4===2||(bar===3&&position===15))note(chord[motif[Math.floor(position/2)]]*2,beat*.15,.8);
+        }
+        const drumSynth=rack.find(s=>s.tone==='drum'&&!s.muted&&s.params.gain>0);
+        if(drumSynth&&drums.kick[position])drum(engine,time,'kick',drumSynth.params.gain/70);
+        if(drumSynth&&drums.snare[position])drum(engine,time,'snare',.85*drumSynth.params.gain/70);
+        if(drumSynth&&drums.hat[position])drum(engine,when,'hat',position%4===2?1:.6*drumSynth.params.gain/70);
+        if(bar===3&&phrase%2===1&&position===15)drum(engine,time,'hat',.4);
+      }
+      let nextStepTime=0;
+      function tick(){
+        if(!isPlaying||!audio)return;
+        if(nextStepTime<audio.ctx.currentTime-.1)nextStepTime=audio.ctx.currentTime+.02;
+        while(nextStepTime<audio.ctx.currentTime+.1){
+          scheduleStep(audio,nextStepTime,step,synths,song,bpm,sequencerSteps,drumPattern);
+          const current=step;setTimeout(()=>{if(isPlaying)$('#player-state').textContent=`4/4 · BAR ${Math.floor(current/16)%4+1}/4 · ${song.names[Math.floor(current/16)%4]}`},Math.max(0,(nextStepTime-audio.ctx.currentTime)*1000));
+          step++;nextStepTime+=60/bpm/4;
+        }
+      }
+      function startClock(){if(!clock)clock=setInterval(tick,25)}
+      async function startMusic(){
+        try{ensureAudio();await audio.ctx.resume();if(isPlaying)return;isPlaying=true;updateSound();
+          nextStepTime=audio.ctx.currentTime+.03;$('#play').textContent='▶ PLAYING';$('#player-state').dataset.playing='true';tick();startClock();
+        }catch(error){$('#player-state').textContent='Audio unavailable — try PLAY again';console.error(error)}
+      }
+      $('#play').addEventListener('click',startMusic);
+      function pauseMusic(){
+        isPlaying=false;clearInterval(clock);clock=null;stopVoices();updateSound();if(audio)audio.ctx.suspend();
+        $('#play').textContent='▶ PLAY';$('#player-state').dataset.playing='false';$('#player-state').textContent='PAUSED';
+      }
+      $('#stop').addEventListener('click',pauseMusic);
+      function writeWav(buffer){const channels=buffer.numberOfChannels,length=buffer.length*channels,bytes=new ArrayBuffer(44+length*2),view=new DataView(bytes);const text=(offset,string)=>{for(let i=0;i<string.length;i++)view.setUint8(offset+i,string.charCodeAt(i))};text(0,'RIFF');view.setUint32(4,36+length*2,true);text(8,'WAVE');text(12,'fmt ');view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,channels,true);view.setUint32(24,buffer.sampleRate,true);view.setUint32(28,buffer.sampleRate*channels*2,true);view.setUint16(32,channels*2,true);view.setUint16(34,16,true);text(36,'data');view.setUint32(40,length*2,true);let pos=44;for(let i=0;i<buffer.length;i++)for(let ch=0;ch<channels;ch++){const sample=Math.max(-1,Math.min(1,buffer.getChannelData(ch)[i]));view.setInt16(pos,sample<0?sample*32768:sample*32767,true);pos+=2}return new Blob([bytes],{type:'audio/wav'})}
+      $('#render-wav').addEventListener('click',async()=>{
+        const button=$('#render-wav');button.disabled=true;button.textContent='BOUNCING…';
+        try{
+          const duration=180,sampleRate=44100,ctx=new OfflineAudioContext(2,sampleRate*duration,sampleRate),engine=createAudio(ctx);
+          const rack=structuredClone(synths),composition=structuredClone(song),tempo=bpm,steps=[...sequencerSteps];
+          for(let index=0,time=0;time<duration;index++,time=index*60/tempo/4)scheduleStep(engine,time,index,rack,composition,tempo,steps,drumPattern);
+          const buffer=await ctx.startRendering(),url=URL.createObjectURL(writeWav(buffer)),link=document.createElement('a');
+          link.href=url;link.download=`sophie-pallas-${tempo}bpm.wav`;link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);
+          button.textContent='WAV SAVED ✓';
+        }catch(error){button.textContent='BOUNCE FAILED — TRY AGAIN';console.error(error)}
+        finally{button.disabled=false;setTimeout(()=>button.textContent='↓ BOUNCE LOOP · 3:00 WAV',2500)}
+      });
+      setInterval(()=>{noteProgress+=passiveIncome;const earned=Math.floor(noteProgress);if(earned>0){credits+=earned;noteProgress-=earned}updateEconomy()},1000);
+      song=makeSong();setBpm(song.tempo);$('.status').textContent=song.style+' · Add a synth to grow the loop.';$('#song-key').textContent=song.key;$('#song-chords').textContent=song.names.join(' · ');$('#player-state').textContent='4/4 · 4-BAR LOOP · PRESS PLAY';
+      draw();window.__mimiGameReady=true;
+    })();
+  </script>
+</body>
+</html>
