@@ -421,8 +421,8 @@
       window.addEventListener('beforeunload',()=>saveGame(true));
       setInterval(()=>{noteProgress+=passiveIncome;const earned=Math.floor(noteProgress);if(earned>0){credits+=earned;noteProgress-=earned}updateEconomy()},1000);
       function updateSessionLabels(){
-        $('.status').textContent='Click Mimi, then spend notes to grow the loop.';
-        $('#loop-style').textContent=`${song.style} · ${song.key}`;
+        const status=$('.status');if(status)status.textContent='Click Mimi, then spend notes to grow the loop.';
+        const loopStyle=$('#loop-style');if(loopStyle)loopStyle.textContent=`${song.style} · ${song.key}`;
         $('#song-key').textContent=song.key;$('#song-chords').textContent=song.names.join(' · ');
       }
       song=makeSong();randomizeNewSession();const restored=loadGame();setBpm(bpm);updateSessionLabels();$('#player-state').textContent='CLICK SOUND';updateAudioToggle();

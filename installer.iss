@@ -22,8 +22,8 @@ Source: "dist\app\*"; DestDir: "{app}\app"; Flags: recursesubdirs ignoreversion
 Source: "dist\runtime\*"; DestDir: "{app}\runtime"; Flags: recursesubdirs ignoreversion
 
 [Icons]
-Name: "{autodesktop}\Sophie Pallas"; Filename: "{app}\runtime\pythonw.exe"; Parameters: "\"{app}\app\launch.py\""; WorkingDir: "{app}\app"; IconFilename: "{app}\app\girl-reference.png"
-Name: "{autoprograms}\Sophie Pallas"; Filename: "{app}\runtime\pythonw.exe"; Parameters: "\"{app}\app\launch.py\""; WorkingDir: "{app}\app"; IconFilename: "{app}\app\girl-reference.png"
+Name: "{autodesktop}\Sophie Pallas"; Filename: "{app}\runtime\pythonw.exe"; Parameters: """{app}\app\launch.py"""; WorkingDir: "{app}\app"; IconFilename: "{app}\app\girl-reference.png"
+Name: "{autoprograms}\Sophie Pallas"; Filename: "{app}\runtime\pythonw.exe"; Parameters: """{app}\app\launch.py"""; WorkingDir: "{app}\app"; IconFilename: "{app}\app\girl-reference.png"
 
 [Run]
-Filename: "{app}\runtime\pythonw.exe"; Parameters: "\"{app}\app\launch.py\""; WorkingDir: "{app}\app"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\runtime\pythonw.exe"; Parameters: """{app}\app\launch.py"""; WorkingDir: "{app}\app"; Flags: nowait postinstall skipifsilent
